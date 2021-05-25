@@ -42,7 +42,9 @@ helpers do
     if username.match?(/\s/) || password.match?(/\s/)
       "Username/password cannot contain spaces."
     elsif [username, password].any? { |cred| cred.strip == "" || cred.nil? }
-      "Please try a different username and password."
+      "Please enter a username and password."
+    else
+      "Username has already been taken.  Please try another."
     end
   end
 

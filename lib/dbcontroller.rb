@@ -57,4 +57,13 @@ class DBController
     result = @conn.exec_params(sql, [username])
     result[0]["id"].to_i
   end
+
+  def change_admin_password(username, password)
+    sql = <<~SQL
+    UPDATE admins (
+    SET password = $2
+    WHERE username = $1);
+    SQL
+    @conn.exec_params(sql, [username, password])
+  end
 end

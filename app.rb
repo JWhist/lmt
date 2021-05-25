@@ -37,7 +37,7 @@ helpers do
     "#{month}/#{day}/#{year}"
   end
 
-  # TODO:  ADD PASSWORD CRITERIA
+  # TODO: ADD PASSWORD CRITERIA
   def clarify_signup_error(username, password)
     if username.match?(/\s/) || password.match?(/\s/)
       "Username/password cannot contain spaces."
@@ -46,7 +46,7 @@ helpers do
     end
   end
 
-  def requre_signed_in_admin
+  def require_signed_in_admin
     if !session[:id]
       session[:message] = "Please sign in."
       redirect '/login'

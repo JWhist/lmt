@@ -1,8 +1,9 @@
+require'sinatra'
+set :environment, :test
 require 'minitest/autorun'
 require_relative '../lib/dbcontroller'
 require 'minitest/reporters'
 MiniTest::Reporters.use!
-ENV['APP_ENV'] = 'test'
 
 class DBControllerTest < MiniTest::Test
   def setup

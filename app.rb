@@ -43,20 +43,21 @@ helpers do
       "Username/password cannot contain spaces."
     elsif [username, password].any? { |cred| cred.strip == "" || cred.nil? }
       "Please enter a username and password."
+    # elsif !meets_password_criteria(password) "Password must xxx"
     else
       "Username has already been taken.  Please try another."
     end
   end
 
   def require_signed_in_admin
-    if !session[:id]
+    if !session[:admin_id]
       session[:message] = "Please sign in."
       redirect '/login'
     end
   end
 
   def reset_session
-    session[:id] = nil
+    session[:admin_id] = nil
   end
 end
 
@@ -76,9 +77,9 @@ post '/login' do
   
   if @db.user_is_verified?(username, password)
     session[:message] = "Welcome Back, #{username}!"
-    session[:id] = @db.admin_id(username)
+    session[:admin_id] = @db.admin_id(username)
     
-    redirect "/admin/#{session[:id]}"
+    redirect "/admin"
   else
     session[:message] = "Invalid Username/Password."
     erb :login
@@ -100,8 +101,10 @@ get '/admin/new' do
 end
 
 # "HOME" page
-get '/admin/:id' do
+get '/admin' do
   require_signed_in_admin
+
+  erb :admin
 end
 
 # Create an admin
@@ -112,10 +115,10 @@ post '/admin/new' do
   if @db.validates_credentials?(username, password)
     password = BCrypt::Password.create(password)
     @db.create_admin!(username, password)
-    session[:id] = @db.admin_id(username)
+    session[:admin_id] = @db.admin_id(username)
     session[:message] = "New user \"#{username}\" created."
     
-    redirect "/admin/#{session[:id]}"
+    redirect "/admin"
   else
     session[:message] = clarify_signup_error(username, password)
     erb :new
@@ -123,7 +126,7 @@ post '/admin/new' do
 end
 
 # Delete an Admin
-post '/admin/:id/delete' do
+post '/admin/delete' do
   require_signed_in_admin
 end
 
@@ -131,13 +134,18 @@ end
 get '/sport/new' do
   requre_signed_in_admin
 end
-get '/sport/:id' do
+get '/sport' do
   requre_signed_in_admin
 end
 post '/sport/new' do
   requre_signed_in_admin
+  admin_id = session[:admin_id]
+  name = params[:name]
+  @db.create_sport!(admin_id, name)
+
+  # redirect '/admin'
 end
-post '/sport/:id/delete' do
+post '/sport/delete' do
   requre_signed_in_admin
 end
 
@@ -145,13 +153,13 @@ end
 get '/league/new' do
   requre_signed_in_admin
 end
-get '/league/:id' do
+get '/league' do
   requre_signed_in_admin
 end
 post '/league/new' do
   requre_signed_in_admin
 end
-post '/league/:id/delete' do
+post '/league/delete' do
   requre_signed_in_admin
 end
 
@@ -159,13 +167,13 @@ end
 get '/team/new' do
   requre_signed_in_admin
 end
-get '/team/:id' do
+get '/team' do
   requre_signed_in_admin
 end
 post '/team/new' do
   requre_signed_in_admin
 end
-post '/team/:id/delete' do
+post '/team/delete' do
   requre_signed_in_admin
 end
 
@@ -173,13 +181,13 @@ end
 get '/coach/new' do
   requre_signed_in_admin
 end
-get '/coach/:id' do
+get '/coach' do
   requre_signed_in_admin
 end
 post '/coach/new' do
   requre_signed_in_admin
 end
-post '/coach/:id/delete' do
+post '/coach/delete' do
   requre_signed_in_admin
 end
 
@@ -187,13 +195,13 @@ end
 get '/player/new' do
   requre_signed_in_admin
 end
-get '/player/:id' do
+get '/player' do
   requre_signed_in_admin
 end
 post '/player/new' do
   requre_signed_in_admin
 end
-post '/player/:id/delete' do
+post '/player/delete' do
   requre_signed_in_admin
 end
 
@@ -201,12 +209,12 @@ end
 get '/game/new' do
   requre_signed_in_admin
 end
-get '/game/:id' do
+get '/game' do
   requre_signed_in_admin
 end
 post '/game/new' do
   requre_signed_in_admin
 end
-post '/game/:id/delete' do
+post '/game/delete' do
   requre_signed_in_admin
 end

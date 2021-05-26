@@ -37,6 +37,9 @@ class DBController
     BCrypt::Password.new(result[0]["password"]) == password_guess
   end
 
+  # --------------------------------------------------------------------
+  # GET IDS
+  # --------------------------------------------------------------------
   def admin_id(username)
     sql = <<~SQL
     SELECT id FROM admins WHERE username = $1;
@@ -47,52 +50,54 @@ class DBController
 
   def sport_id(admin_id, name)
     sql = <<~SQL
-    SELECT id FROM sports WHERE name = $1;
+    SELECT id FROM sports WHERE admin_id = $1 AND name = $2;
     SQL
-    result = @conn.exec_params(sql, [name])
+    result = @conn.exec_params(sql, [admin_id, name])
     result[0]["id"].to_i
   end
 
   def league_id(admin_id, name)
     sql = <<~SQL
-    SELECT id FROM leagues WHERE name = $1;
+    SELECT id FROM leagues WHERE admin_id = $1 AND name = $2;
     SQL
-    result = @conn.exec_params(sql, [name])
+    result = @conn.exec_params(sql, [admin_id, name])
     result[0]["id"].to_i
   end
 
   def team_id(admin_id, name)
     sql = <<~SQL
-    SELECT id FROM teams WHERE name = $1;
+    SELECT id FROM teams WHERE admin_id = $1 AND name = $2;
     SQL
-    result = @conn.exec_params(sql, [name])
+    result = @conn.exec_params(sql, [admin_id, name])
     result[0]["id"].to_i
   end
 
   def player_id(admin_id, name)
     sql = <<~SQL
-    SELECT id FROM players WHERE name = $1;
+    SELECT id FROM players WHERE admin_id = $1 AND name = $2;
     SQL
-    result = @conn.exec_params(sql, [name])
+    result = @conn.exec_params(sql, [admin_id, name])
     result[0]["id"].to_i
   end
 
   def coach_id(admin_id, name)
     sql = <<~SQL
-    SELECT id FROM coaches WHERE name = $1;
+    SELECT id FROM coaches WHERE admin_id = $1 AND name = $2;
     SQL
-    result = @conn.exec_params(sql, [name])
+    result = @conn.exec_params(sql, [admin_id, name])
     result[0]["id"].to_i
   end
   
   def game_id(admin_id, date)
     sql = <<~SQL
-    SELECT id FROM games WHERE name = $1 AND date = $2;
+    SELECT id FROM games WHERE admin_id = $1 AND date = $2;
     SQL
     result = @conn.exec_params(sql, [name, date])
     result[0]["id"].to_i
   end
-
+  # --------------------------------------------------------------------
+  # ADMIN
+  # --------------------------------------------------------------------
   def create_admin!(username, password)
     sql = <<~SQL
     INSERT INTO admins (username, password) VALUES
@@ -114,7 +119,9 @@ class DBController
     SQL
     @conn.exec_params(sql, [username, password])
   end
-
+  # --------------------------------------------------------------------
+  # SPORTS
+  # --------------------------------------------------------------------
   def create_sport!(admin_id, name)
     sql = <<~SQL
     INSERT INTO sports (name, admin_id) VALUES ($1, $2);
@@ -124,10 +131,12 @@ class DBController
   end
 
   def delete_sport!(admin_id, name)
-    sql = "DELETE FROM sports WHERE admin_id = $1 AND name = $2;"
+    sql = "DELETE FROM sports WHERE (admin_id = $1 AND name = $2);"
     @conn.exec_params(sql, [admin_id, name])
   end
-
+  # --------------------------------------------------------------------
+  # LEAGUES
+  # --------------------------------------------------------------------
   def create_league!(admin_id, sport_id, name)
     sql = <<~SQL
     INSERT INTO leagues (name, sport_id, admin_id) VALUES ($1, $2, $3);
@@ -139,5 +148,65 @@ class DBController
   def delete_league!(admin_id, name)
     sql = "DELETE FROM leagues WHERE admin_id = $1 AND name = $2;"
     @conn.exec_params(sql, [admin_id, name])
+  end
+  # --------------------------------------------------------------------
+  # TEAMS
+  # --------------------------------------------------------------------
+  def create_team!(admin_id, league_id, name)
+    sql = <<~SQL
+    INSERT INTO teams (admin_id, league_id, name) VALUES ($1, $2, $3);
+    SQL
+
+    @conn.exec_params(sql, [admin_id, league_id, name])
+  end
+
+  def delete_team!(admin_id, name)
+    sql = "DELETE FROM teams WHERE admin_id = $1 AND name = $2;"
+    @conn.exec_params(sql, [admin_id, name])
+  end
+  # --------------------------------------------------------------------
+  # PLAYERS
+  # --------------------------------------------------------------------
+  def create_player!(admin_id, name)
+    sql = <<~SQL
+    INSERT INTO players (admin_id, name) VALUES ($1, $2);
+    SQL
+
+    @conn.exec_params(sql, [admin_id, name])
+  end
+
+  def delete_player!(admin_id, name)
+    sql = "DELETE FROM players WHERE admin_id = $1 AND name = $2;"
+    @conn.exec_params(sql, [admin_id, name])
+  end
+  # --------------------------------------------------------------------
+  # COACHES
+  # --------------------------------------------------------------------
+  def create_coach!(admin_id, name)
+    sql = <<~SQL
+    INSERT INTO coaches (admin_id, name) VALUES ($1, $2);
+    SQL
+
+    @conn.exec_params(sql, [admin_id, name])
+  end
+
+  def delete_coach!(admin_id, name)
+    sql = "DELETE FROM coaches WHERE admin_id = $1 AND name = $2;"
+    @conn.exec_params(sql, [admin_id, name])
+  end
+  # --------------------------------------------------------------------
+  # GAMES
+  # --------------------------------------------------------------------
+  def create_game!(admin_id, date)
+    sql = <<~SQL
+    INSERT INTO games (admin_id, gameday) VALUES ($1, $2);
+    SQL
+
+    @conn.exec_params(sql, [admin_id, date])
+  end
+
+  def delete_game!(admin_id, date)
+    sql = "DELETE FROM games WHERE admin_id = $1 AND gameday = $2;"
+    @conn.exec_params(sql, [admin_id, date])
   end
 end

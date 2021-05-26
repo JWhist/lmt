@@ -226,4 +226,39 @@ class DBController
     result = @conn.exec_params(sql, [admin_id, team_id])
     result.values
   end
+  # --------------------------------------------------------------------
+  # GET COACH ROSTER
+  # --------------------------------------------------------------------
+  def coach_roster(admin_id, team_id)
+    sql = <<~SQL
+    SELECT coaches.name AS Name, coaches.email AS Email, coaches.phone AS Phone
+    FROM coaches JOIN teams ON
+    coaches.admin_id = teams.admin_id
+    WHERE
+    coaches.admin_id = $1
+    AND
+    teams.id = $2;
+    SQL
+
+    result = @conn.exec_params(sql, [admin_id, team_id])
+    result.values
+  end
+  # --------------------------------------------------------------------
+  # GET TEAM SCHEDULE
+  # --------------------------------------------------------------------
+  def team_schedule(admin_id, team_id)
+    sql = <<~SQL
+    SELECT gameday as Date, venue as Location,  
+    (SELECT name as Home FROM teams WHERE teams.id = hometeam_id), 
+    (SELECT name as Away FROM teams WHERE teams.id = awayteam_id) 
+    FROM games JOIN teams ON
+    games.awayteam_id = teams.id OR
+    games.hometeam_id = teams.id WHERE
+    games.admin_id = $1 AND
+    teams.id = $2;
+    SQL
+
+    result = @db.conn.exec_params(sql, [admin_id, team_id])
+    result.values
+  end
 end

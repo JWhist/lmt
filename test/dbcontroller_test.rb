@@ -299,8 +299,40 @@ class DBControllerTest < MiniTest::Test
     result = @db.create_team!(admin_id, league_id, 'Buffalo Bills')
 
     team_id = @db.team_id(admin_id, 'Buffalo Bills')
-    p @db.player_roster(admin_id, team_id)
-    assert false
+    result = @db.player_roster(admin_id, team_id)
+    # Returns rows of "Name", "Email", "Phone" as string objects
+    ['Billy', 'Joe', 'Mark'].each_with_index do |name, index|
+      assert_equal result[index][0], name
+    end
+  end
 
+  def test_coach_roster
+    password = BCrypt::Password.create('password')
+    result = @db.create_admin!('user', password)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    admin_id = @db.admin_id('user')
+    # Create 3 players
+    ['Billy', 'Joe', 'Mark'].each do |name|
+      @db.create_coach!(admin_id, name)
+    end
+    result = @db.conn.exec("SELECT * FROM coaches;")
+    assert_equal result.ntuples, 3 # 3 coaches added
+    # Create a team
+    @db.create_sport!(admin_id, 'Baseball')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    sport_id = @db.sport_id(admin_id, 'Baseball')
+    result = @db.create_league!(admin_id, sport_id, 'My Little League')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    league_id = @db.league_id(admin_id, 'My Little League')
+    result = @db.create_team!(admin_id, league_id, 'Buffalo Bills')
+
+    team_id = @db.team_id(admin_id, 'Buffalo Bills')
+    result = @db.coach_roster(admin_id, team_id)
+    # Returns rows of "Name", "Email", "Phone" as string objects
+    ['Billy', 'Joe', 'Mark'].each_with_index do |name, index|
+      assert_equal result[index][0], name
+    end
   end
 end

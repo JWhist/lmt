@@ -67,6 +67,8 @@ end
 
 # Landing page --> Sign in
 get '/login' do
+  session['SameSite'] = 'Strict'
+
   erb :login
 end
 
@@ -128,6 +130,13 @@ end
 # Delete an Admin
 post '/admin/delete' do
   require_signed_in_admin
+
+  id = session[:admin_id]
+  @db.delete_admin!(id)
+  session[:message] = "Admin has been deleted."
+  reset_session
+
+  redirect '/login'
 end
 
 # Sport routes

@@ -1,2 +1,12 @@
-<h2>Hello</h2>
-<a href='/logout'><button>Log Out</button></a>
+<div id='background'>
+  <h2>Hello</h2>
+  <a href='/logout'><button>Log Out</button></a>
+  <button onclick="document.getElementById('cancelModal').style.display='block';document.getElementById('background').style.opacity='.5'">Delete Admin</button>
+</div>
+  <div id='cancelModal' style='display: none'>
+    <form style='display: inline-block;'action='/admin/delete' method='post'>
+      <h4>Are you Sure?</h4>
+      <button class='button danger' type='submit'>Delete User</button>
+      <button class='button' type='reset' onclick="document.getElementById('cancelModal').style.display='none';document.getElementById('background').style.opacity='1'">Cancel</button>
+    </form>
+  </div>

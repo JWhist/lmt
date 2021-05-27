@@ -1,0 +1,23 @@
+#cancelModal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  margin: 0 auto;
+  z-index: 1; /* Sit on top */
+  left: 25%;
+  top: 15%;
+  width: 50%; /* Full width */
+  height: 50%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: #e3e6ee;
+  padding-top: 50px;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+#background {
+  opacity: 1;
+}
+.danger {
+  background-color: rgb(233, 62, 62);
+  font-weight: bold;
+}

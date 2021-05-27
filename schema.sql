@@ -28,7 +28,7 @@ CREATE TABLE players (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT,
-  phone INTEGER,
+  phone TEXT,
   admin_id INTEGER REFERENCES admins (id)
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE coaches (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT,
-  phone INTEGER,
+  phone TEXT,
   admin_id INTEGER REFERENCES admins (id)
 );
 
@@ -44,8 +44,8 @@ CREATE TABLE games (
   id SERIAL PRIMARY KEY,
   gameday DATE,
   venue TEXT,
-  homescore INTEGER,
-  awayscore INTEGER,
+  homescore TEXT,
+  awayscore TEXT,
   hometeam_id INTEGER REFERENCES teams (id),
   awayteam_id INTEGER REFERENCES teams (id),
   admin_id INTEGER REFERENCES admins (id)

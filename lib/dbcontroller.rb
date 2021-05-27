@@ -167,42 +167,95 @@ class DBController
   # --------------------------------------------------------------------
   # PLAYERS
   # --------------------------------------------------------------------
-  def create_player!(admin_id, name)
+  def create_player!(options = {})
+    admin_id = options[:admin_id]
+    name = options[:name]
+    email = options[:email]
+    phone = options[:phone]
+
     sql = <<~SQL
-    INSERT INTO players (admin_id, name) VALUES ($1, $2);
+    INSERT INTO players (admin_id, name, email, phone) VALUES ($1, $2, $3, $4);
     SQL
 
-    @conn.exec_params(sql, [admin_id, name])
+    @conn.exec_params(sql, [admin_id, name, email, phone])
   end
 
   def delete_player!(admin_id, name)
     sql = "DELETE FROM players WHERE admin_id = $1 AND name = $2;"
     @conn.exec_params(sql, [admin_id, name])
   end
+
+  def edit_player_info(options)
+    admin_id = options[:admin_id]
+    player_id = options[:player_id]
+    name = options[:name]
+    email = options[:email]
+    phone = options[:phone]
+    
+    sql = <<~SQL
+    UPDATE players
+    SET name = $3, email = $4, phone = $5
+    WHERE admin_id = $1 AND
+    id = $2;
+    SQL
+
+    @conn.exec_params(sql, [admin_id, player_id, name, email, phone])
+  end
   # --------------------------------------------------------------------
   # COACHES
   # --------------------------------------------------------------------
-  def create_coach!(admin_id, name)
+  def create_coach!(options = {})
+    admin_id = options[:admin_id]
+    name = options[:name]
+    email = options[:email]
+    phone = options[:phone]
+    
     sql = <<~SQL
-    INSERT INTO coaches (admin_id, name) VALUES ($1, $2);
+    INSERT INTO coaches (admin_id, name, email, phone) VALUES ($1, $2, $3, $4);
     SQL
 
-    @conn.exec_params(sql, [admin_id, name])
+    @conn.exec_params(sql, [admin_id, name, email, phone])
   end
 
   def delete_coach!(admin_id, name)
     sql = "DELETE FROM coaches WHERE admin_id = $1 AND name = $2;"
     @conn.exec_params(sql, [admin_id, name])
   end
+
+  def edit_coach_info(options = {})
+    admin_id = options[:admin_id]
+    coach_id = options[:coach_id]
+    name = options[:name]
+    email = options[:email]
+    phone = options[:phone]
+    
+    sql = <<~SQL
+    UPDATE coaches
+    SET name = $3, email = $4, phone = $5
+    WHERE admin_id = $1 AND
+    id = $2;
+    SQL
+
+    @conn.exec_params(sql, [admin_id, coach_id, name, email, phone])
+  end
   # --------------------------------------------------------------------
   # GAMES
   # --------------------------------------------------------------------
-  def create_game!(admin_id, date)
+  def create_game!(options = {})
+    admin_id = options[:admin_id]
+    date = options[:date] || ''
+    venue = options[:venue] || ''
+    hs = options[:hs] || ''
+    as = options[:as] || ''
+    hid = options[:hid] 
+    aid = options[:aid] 
+
     sql = <<~SQL
-    INSERT INTO games (admin_id, gameday) VALUES ($1, $2);
+    INSERT INTO games (admin_id, gameday, venue, homescore, awayscore, hometeam_id, awayteam_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7);
     SQL
 
-    @conn.exec_params(sql, [admin_id, date])
+    @conn.exec_params(sql, [admin_id, date, venue, hs, as, hid, aid])
   end
 
   def delete_game!(admin_id, date)
@@ -224,7 +277,7 @@ class DBController
     SQL
 
     result = @conn.exec_params(sql, [admin_id, team_id])
-    result.values
+    [result.fields, result.values]
   end
   # --------------------------------------------------------------------
   # GET COACH ROSTER
@@ -241,7 +294,7 @@ class DBController
     SQL
 
     result = @conn.exec_params(sql, [admin_id, team_id])
-    result.values
+    [result.fields, result.values]
   end
   # --------------------------------------------------------------------
   # GET TEAM SCHEDULE
@@ -258,7 +311,8 @@ class DBController
     teams.id = $2;
     SQL
 
-    result = @db.conn.exec_params(sql, [admin_id, team_id])
-    result.values
+    result = @conn.exec_params(sql, [admin_id, team_id])
+    
+    [result.fields, result.values]
   end
 end

@@ -201,6 +201,24 @@ class DBController
 
     @conn.exec_params(sql, [admin_id, player_id, name, email, phone])
   end
+
+  def assign_player_to_team(admin_id, player_id, team_id)
+    sql = <<~SQL
+    INSERT INTO teams_players (admin_id, player_id, team_id)
+    VALUES ($1, $2, $3)
+    SQL
+
+    @conn.exec_params(sql, [admin_id, player_id, team_id])
+  end
+
+  def remove_player_from_team(admin_id, player_id, team_id)
+    sql = <<~SQL
+    DELETE FROM teams_players WHERE
+    admin_id = $1 AND player_id = $2 AND team_id = $3;
+    SQL
+
+    @conn.exec_params(sql, [admin_id, player_id, team_id])
+  end
   # --------------------------------------------------------------------
   # COACHES
   # --------------------------------------------------------------------
@@ -237,6 +255,24 @@ class DBController
     SQL
 
     @conn.exec_params(sql, [admin_id, coach_id, name, email, phone])
+  end
+
+  def assign_coach_to_team(admin_id, coach_id, team_id)
+    sql = <<~SQL
+    INSERT INTO teams_coaches (admin_id, coach_id, team_id)
+    VALUES ($1, $2, $3)
+    SQL
+
+    @conn.exec_params(sql, [admin_id, coach_id, team_id])
+  end
+
+  def remove_coach_from_team(admin_id, coach_id, team_id)
+    sql = <<~SQL
+    DELETE FROM teams_coaches WHERE
+    admin_id = $1 AND coach_id = $2 AND team_id = $3;
+    SQL
+
+    @conn.exec_params(sql, [admin_id, coach_id, team_id])
   end
   # --------------------------------------------------------------------
   # GAMES

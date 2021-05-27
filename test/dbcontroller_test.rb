@@ -12,7 +12,8 @@ class DBControllerTest < MiniTest::Test
 
   def teardown
     begin
-      ['games', 'coaches', 'players', 'teams', 'leagues', 'sports', 'admins'].each do |t|
+      ['teams_players', 'teams_coaches', 'games', 'coaches', 'players', 
+        'teams', 'leagues', 'sports', 'admins'].each do |t|
         @db.conn.exec("DELETE FROM #{t}")
       end
       @db.disconnect
@@ -232,10 +233,86 @@ class DBControllerTest < MiniTest::Test
 
     result = @db.edit_player_info(options)
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
-    
+
     result2 = @db.conn.exec("SELECT * FROM players;")
     assert_equal result2.ntuples, 1 # still only 1 player
     assert_equal result2[0]['name'], 'Jim Smith'
+  end
+
+  def test_assign_player_to_team
+    password = BCrypt::Password.create('password')
+    result = @db.create_admin!('user', password)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    admin_id = @db.admin_id('user')
+    result = @db.create_player!({admin_id: admin_id, name: 'Billy Bob Thornton'})
+    result2 = @db.conn.exec("SELECT * FROM players;")
+
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result2.ntuples, 1 # 1 player added
+
+    player_id = @db.player_id(admin_id, 'Billy Bob Thornton')
+    @db.create_sport!(admin_id, 'Baseball')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    sport_id = @db.sport_id(admin_id, 'Baseball')
+    result = @db.create_league!(admin_id, sport_id, 'My Little League')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    league_id = @db.league_id(admin_id, 'My Little League')
+    result = @db.create_team!(admin_id, league_id, 'Buffalo Bills')
+    team_id = @db.team_id(admin_id, 'Buffalo Bills')
+
+    result = @db.conn.exec("SELECT * FROM teams;")
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result.ntuples, 1 # team added
+
+    result = @db.assign_player_to_team(admin_id, player_id, team_id)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    result = @db.conn.exec("SELECT * FROM teams_players;")
+    assert_equal result.ntuples, 1 # player added
+  end
+
+  def test_remove_player_from_team
+    password = BCrypt::Password.create('password')
+    result = @db.create_admin!('user', password)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    admin_id = @db.admin_id('user')
+    result = @db.create_player!({admin_id: admin_id, name: 'Billy Bob Thornton'})
+    result2 = @db.conn.exec("SELECT * FROM players;")
+
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result2.ntuples, 1 # 1 player added
+
+    player_id = @db.player_id(admin_id, 'Billy Bob Thornton')
+    @db.create_sport!(admin_id, 'Baseball')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    sport_id = @db.sport_id(admin_id, 'Baseball')
+    result = @db.create_league!(admin_id, sport_id, 'My Little League')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    league_id = @db.league_id(admin_id, 'My Little League')
+    result = @db.create_team!(admin_id, league_id, 'Buffalo Bills')
+    team_id = @db.team_id(admin_id, 'Buffalo Bills')
+
+    result = @db.conn.exec("SELECT * FROM teams;")
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result.ntuples, 1 # team added
+
+    result = @db.assign_player_to_team(admin_id, player_id, team_id)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    result = @db.conn.exec("SELECT * FROM teams_players;")
+    assert_equal result.ntuples, 1 # player added
+
+    result = @db.remove_player_from_team(admin_id, player_id, team_id)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    result = @db.conn.exec("SELECT * FROM teams_players;")
+    assert_equal result.ntuples, 0 # player removed
   end
 
   def test_create_coach
@@ -291,6 +368,82 @@ class DBControllerTest < MiniTest::Test
     result2 = @db.conn.exec("SELECT * FROM coaches;")
     assert_equal result2.ntuples, 1 # still only 1 coach
     assert_equal result2[0]['name'], 'Jim Smith'
+  end
+
+  def test_assign_coach_to_team
+    password = BCrypt::Password.create('password')
+    result = @db.create_admin!('user', password)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    admin_id = @db.admin_id('user')
+    result = @db.create_coach!({admin_id: admin_id, name: 'Billy Bob Thornton'})
+    result2 = @db.conn.exec("SELECT * FROM coaches;")
+
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result2.ntuples, 1 # 1 coach added
+
+    coach_id = @db.coach_id(admin_id, 'Billy Bob Thornton')
+    @db.create_sport!(admin_id, 'Baseball')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    sport_id = @db.sport_id(admin_id, 'Baseball')
+    result = @db.create_league!(admin_id, sport_id, 'My Little League')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    league_id = @db.league_id(admin_id, 'My Little League')
+    result = @db.create_team!(admin_id, league_id, 'Buffalo Bills')
+    team_id = @db.team_id(admin_id, 'Buffalo Bills')
+
+    result = @db.conn.exec("SELECT * FROM teams;")
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result.ntuples, 1 # team added
+
+    result = @db.assign_coach_to_team(admin_id, coach_id, team_id)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    result = @db.conn.exec("SELECT * FROM teams_coaches;")
+    assert_equal result.ntuples, 1 # player added
+  end
+
+  def test_remove_coach_from_team
+    password = BCrypt::Password.create('password')
+    result = @db.create_admin!('user', password)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    admin_id = @db.admin_id('user')
+    result = @db.create_coach!({admin_id: admin_id, name: 'Billy Bob Thornton'})
+    result2 = @db.conn.exec("SELECT * FROM coaches;")
+
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result2.ntuples, 1 # 1 player added
+
+    coach_id = @db.coach_id(admin_id, 'Billy Bob Thornton')
+    @db.create_sport!(admin_id, 'Baseball')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    sport_id = @db.sport_id(admin_id, 'Baseball')
+    result = @db.create_league!(admin_id, sport_id, 'My Little League')
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    league_id = @db.league_id(admin_id, 'My Little League')
+    result = @db.create_team!(admin_id, league_id, 'Buffalo Bills')
+    team_id = @db.team_id(admin_id, 'Buffalo Bills')
+
+    result = @db.conn.exec("SELECT * FROM teams;")
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+    assert_equal result.ntuples, 1 # team added
+
+    result = @db.assign_coach_to_team(admin_id, coach_id, team_id)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    result = @db.conn.exec("SELECT * FROM teams_coaches;")
+    assert_equal result.ntuples, 1 # player added
+
+    result = @db.remove_coach_from_team(admin_id, coach_id, team_id)
+    assert_instance_of PG::Result, result # PGRES_COMMAND_OK
+
+    result = @db.conn.exec("SELECT * FROM teams_coaches;")
+    assert_equal result.ntuples, 0 # player removed
   end
 
   def test_create_game

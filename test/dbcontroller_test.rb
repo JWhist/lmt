@@ -7,10 +7,17 @@ MiniTest::Reporters.use!
 
 class DBControllerTest < MiniTest::Test
   def setup
-    @db = DBController.new
+    counter = 0
+    begin
+      @db = DBController.new
+    rescue PG::ConnectionBad
+      counter += 1
+      retry if counter < 4
+    end
   end
 
   def teardown
+    counter = 0
     begin
       ['teams_players', 'teams_coaches', 'games', 'coaches', 'players', 
         'teams', 'leagues', 'sports', 'admins'].each do |t|
@@ -18,6 +25,8 @@ class DBControllerTest < MiniTest::Test
       end
       @db.disconnect
     rescue PG::ConnectionBad
+      counter += 1
+      retry if counter < 4
     end
   end
 

@@ -214,14 +214,14 @@ class DBControllerTest < MiniTest::Test
     admin_id = @db.admin_id('user')
     @db.create_player!({admin_id: admin_id, name: 'Billy Bob Thornton'})
     result = @db.conn.exec("SELECT * FROM players;")
-    assert_equal result.ntuples, 1 # 1 sport added
+    assert_equal result.ntuples, 1 # 1 player added
 
     result = @db.delete_player!(admin_id, 'Billy Bob Thornton')
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK    
     
     result = @db.conn.exec("SELECT * FROM players;")
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
-    assert_equal result.ntuples, 0 # sport deleted
+    assert_equal result.ntuples, 0 # player deleted
   end
 
   def test_edit_player_info
@@ -334,7 +334,7 @@ class DBControllerTest < MiniTest::Test
     result2 = @db.conn.exec("SELECT * FROM coaches;")
 
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
-    assert_equal result2.ntuples, 1 # 1 sport added
+    assert_equal result2.ntuples, 1 # 1 coach added
   end
 
   def test_delete_coach
@@ -345,14 +345,14 @@ class DBControllerTest < MiniTest::Test
     admin_id = @db.admin_id('user')
     @db.create_coach!({admin_id: admin_id, name: 'Vince Lombardi' })
     result = @db.conn.exec("SELECT * FROM coaches;")
-    assert_equal result.ntuples, 1 # 1 sport added
+    assert_equal result.ntuples, 1 # 1 coach added
 
     result = @db.delete_coach!(admin_id, 'Vince Lombardi')
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK    
     
     result = @db.conn.exec("SELECT * FROM coaches;")
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
-    assert_equal result.ntuples, 0 # sport deleted
+    assert_equal result.ntuples, 0 # coach deleted
   end
 
   def test_edit_coach_info
@@ -411,7 +411,7 @@ class DBControllerTest < MiniTest::Test
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
 
     result = @db.conn.exec("SELECT * FROM teams_coaches;")
-    assert_equal result.ntuples, 1 # player added
+    assert_equal result.ntuples, 1 # coach added
   end
 
   def test_remove_coach_from_team
@@ -424,7 +424,7 @@ class DBControllerTest < MiniTest::Test
     result2 = @db.conn.exec("SELECT * FROM coaches;")
 
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
-    assert_equal result2.ntuples, 1 # 1 player added
+    assert_equal result2.ntuples, 1 # 1 coach added
 
     coach_id = @db.coach_id(admin_id, 'Billy Bob Thornton')
     @db.create_sport!(admin_id, 'Baseball')
@@ -446,13 +446,13 @@ class DBControllerTest < MiniTest::Test
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
 
     result = @db.conn.exec("SELECT * FROM teams_coaches;")
-    assert_equal result.ntuples, 1 # player added
+    assert_equal result.ntuples, 1 # coach added
 
     result = @db.remove_coach_from_team(admin_id, coach_id, team_id)
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
 
     result = @db.conn.exec("SELECT * FROM teams_coaches;")
-    assert_equal result.ntuples, 0 # player removed
+    assert_equal result.ntuples, 0 # coach removed
   end
 
   def test_create_game
@@ -465,7 +465,7 @@ class DBControllerTest < MiniTest::Test
     result2 = @db.conn.exec("SELECT * FROM games;")
 
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
-    assert_equal result2.ntuples, 1 # 1 sport added
+    assert_equal result2.ntuples, 1 # 1 game added
   end
 
   def test_delete_game
@@ -476,14 +476,14 @@ class DBControllerTest < MiniTest::Test
     admin_id = @db.admin_id('user')
     @db.create_game!({admin_id: admin_id, date: '2021-05-28'})
     result = @db.conn.exec("SELECT * FROM games;")
-    assert_equal result.ntuples, 1 # 1 sport added
+    assert_equal result.ntuples, 1 # 1 game added
 
     result = @db.delete_game!(admin_id, '2021-05-28')
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK    
     
     result = @db.conn.exec("SELECT * FROM games;")
     assert_instance_of PG::Result, result # PGRES_COMMAND_OK
-    assert_equal result.ntuples, 0 # sport deleted
+    assert_equal result.ntuples, 0 # game deleted
   end
 
   def test_player_roster

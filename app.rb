@@ -111,8 +111,8 @@ end
 
 # Create an admin
 post '/admin/new' do
-  username = params[:username]
-  password = params[:password]
+  username = params[:username].strip
+  password = params[:password].strip
 
   if @db.validates_credentials?(username, password)
     password = BCrypt::Password.create(password)

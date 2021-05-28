@@ -67,6 +67,7 @@ end
 
 # Landing page --> Sign in
 get '/login' do
+  @title = 'LMT - Login Page'
   session['SameSite'] = 'Strict'
 
   erb :login
@@ -98,13 +99,24 @@ end
 
 # Admin page ---> To create an admin
 get '/admin/new' do
-  
+  @title = 'LMT - Create New Admin'
   erb :new
 end
 
 # "HOME" page
 get '/admin' do
   require_signed_in_admin
+  admin_id = session[:admin_id]
+  sport_name = params[:sport]
+  puts sport_name
+  @sports = @db.sports(admin_id)
+
+  if sport_name
+    sport_id = @db.sport_id(admin_id, sport_name)
+    @leagues = @db.leagues(admin_id, sport_id)
+  end
+
+  @title = 'LMT - Admin Home Page'
 
   erb :admin
 end
@@ -141,13 +153,13 @@ end
 
 # Sport routes
 get '/sport/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 get '/sport' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/sport/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
   admin_id = session[:admin_id]
   name = params[:name]
   @db.create_sport!(admin_id, name)
@@ -155,75 +167,95 @@ post '/sport/new' do
   # redirect '/admin'
 end
 post '/sport/delete' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 
 # League routes
 get '/league/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
-get '/league' do
-  requre_signed_in_admin
+
+post '/leagues' do
+  content_type :json
+  require_signed_in_admin
+
+  sport = params[:sport]
+  admin_id = session[:admin_id]
+  sport_id = @db.sport_id(admin_id, sport)
+
+  @db.leagues(admin_id, sport_id).to_json
 end
+
 post '/league/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/league/delete' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 
 # Team routes
 get '/team/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
-get '/team' do
-  requre_signed_in_admin
+get '/teams' do
+  require_signed_in_admin
+end
+
+post '/teams' do
+  content_type :json
+  require_signed_in_admin
+
+  league = params[:league]
+  admin_id = session[:admin_id]
+  league_id = @db.league_id(admin_id, league)
+
+  @db.teams(admin_id, league_id).to_json
 end
 post '/team/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/team/delete' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 
 # Coach routes
 get '/coach/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 get '/coach' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/coach/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/coach/delete' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 
 # Player routes
 get '/player/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 get '/player' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/player/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/player/delete' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 
 # Game routes
 get '/game/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 get '/game' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/game/new' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end
 post '/game/delete' do
-  requre_signed_in_admin
+  require_signed_in_admin
 end

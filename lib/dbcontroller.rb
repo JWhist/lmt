@@ -134,6 +134,12 @@ class DBController
     sql = "DELETE FROM sports WHERE (admin_id = $1 AND name = $2);"
     @conn.exec_params(sql, [admin_id, name])
   end
+
+  def sports(admin_id)
+    sql = "SELECT name FROM sports WHERE sports.admin_id = $1;"
+    result = @conn.exec_params(sql, [admin_id])
+    result.values
+  end
   # --------------------------------------------------------------------
   # LEAGUES
   # --------------------------------------------------------------------
@@ -149,6 +155,12 @@ class DBController
     sql = "DELETE FROM leagues WHERE admin_id = $1 AND name = $2;"
     @conn.exec_params(sql, [admin_id, name])
   end
+
+  def leagues(admin_id, sport_id)
+    sql = 'SELECT leagues.id AS Id, leagues.name AS Name FROM leagues WHERE leagues.admin_id = $1 AND leagues.sport_id = $2;'
+    result = @conn.exec_params(sql, [admin_id, sport_id])
+    result.values
+  end
   # --------------------------------------------------------------------
   # TEAMS
   # --------------------------------------------------------------------
@@ -163,6 +175,12 @@ class DBController
   def delete_team!(admin_id, name)
     sql = "DELETE FROM teams WHERE admin_id = $1 AND name = $2;"
     @conn.exec_params(sql, [admin_id, name])
+  end
+
+  def teams(admin_id, league_id)
+    sql = 'SELECT teams.id AS Id, teams.name AS Name FROM teams WHERE teams.admin_id = $1 AND teams.league_id = $2;'
+    result = @conn.exec_params(sql, [admin_id, league_id])
+    result.values
   end
   # --------------------------------------------------------------------
   # PLAYERS
@@ -219,6 +237,12 @@ class DBController
 
     @conn.exec_params(sql, [admin_id, player_id, team_id])
   end
+
+  def players(admin_id)
+    sql = "SELECT name, email, phone FROM players WHERE players.admin_id = $1;"
+    result = @conn.exec_params(sql, [admin_id])
+    [result.fields, result.values]
+  end
   # --------------------------------------------------------------------
   # COACHES
   # --------------------------------------------------------------------
@@ -273,6 +297,12 @@ class DBController
     SQL
 
     @conn.exec_params(sql, [admin_id, coach_id, team_id])
+  end
+
+  def coaches(admin_id)
+    sql = 'SELECT name, email, phone FROM coaches WHERE coaches.admin_id = $1;'
+    result = @conn.exec_params(sql, [admin_id])
+    [result.fields, result.values]
   end
   # --------------------------------------------------------------------
   # GAMES

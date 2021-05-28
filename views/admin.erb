@@ -1,12 +1,188 @@
-<div id='background'>
-  <h2>Hello</h2>
-  <a href='/logout'><button>Log Out</button></a>
-  <button onclick="document.getElementById('cancelModal').style.display='block';document.getElementById('background').style.opacity='.5'">Delete Admin</button>
-</div>
-  <div id='cancelModal' style='display: none'>
-    <form style='display: inline-block;'action='/admin/delete' method='post'>
-      <h4>Are you Sure?</h4>
-      <button class='button danger' type='submit'>Delete User</button>
-      <button class='button' type='reset' onclick="document.getElementById('cancelModal').style.display='none';document.getElementById('background').style.opacity='1'">Cancel</button>
-    </form>
+<header>Admin Page</header>
+<div id='maincontainer'>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sports = document.getElementById("sports");
+  
+      sports.addEventListener('change', (event) => {
+        event.preventDefault();
+        const options = event.target.options;
+        const res = document.querySelector('#leagues');
+        
+        let request = new XMLHttpRequest();
+                
+        request.open('POST', `/leagues?sport=${options[event.target.selectedIndex].value}`);
+  
+        request.addEventListener("load", (e) => {
+          e.preventDefault();
+          let options = JSON.parse(request.responseText);
+ 
+          if (res.innerHTML)res.innerHTML = '';
+          options[1].forEach((option, i) => {
+            let op = document.createElement('option');
+            op.value = option[1];
+            op.innerText = op.value;
+
+            res.appendChild(op);
+          });
+          makeTeams();
+        });
+  
+        request.send();
+        
+      });
+    });
+  </script>
+  <script>
+  function makeTeams() {
+    const leagues = document.getElementById("leagues");
+    console.log("working")
+    leagues.addEventListener('change', (event) => {
+      event.preventDefault();
+     
+      const options = event.target.options;
+      console.log(options);
+      const res = document.querySelector('#teams');
+      
+      let request = new XMLHttpRequest();
+              
+      request.open('POST', `/teams?league=${options[event.target.selectedIndex].value}`);
+
+      request.addEventListener("load", (e) => {
+        e.preventDefault();
+      
+        let options = JSON.parse(request.responseText);
+
+        if (res.innerHTML)res.innerHTML = '';
+        options[1].forEach((option, i) => {
+          let op = document.createElement('option');
+          op.value = option[1];
+          op.innerText = op.value;
+
+          res.appendChild(op);
+        });
+
+        
+        makeGames()
+      });
+
+      request.send();
+    });
+
+  }
+  </script>
+  <script>
+  function makeGames() {
+    const sports = document.getElementById("leagues");
+
+    sports.addEventListener('change', (event) => {
+      event.preventDefault();
+      const options = event.target.options;
+      const res = document.querySelector('#games');
+      
+      let request = new XMLHttpRequest();
+              
+      request.open('POST', `/games?team=${options[event.target.selectedIndex].value}`);
+
+      request.addEventListener("load", (e) => {
+        e.preventDefault();
+      
+        let options = JSON.parse(request.responseText);
+
+        if (res.innerHTML)res.innerHTML = '';
+        options[1].forEach((option, i) => {
+          let op = document.createElement('option');
+          op.value = option[1];
+          op.innerText = op.value;
+
+          res.appendChild(op);
+        });
+      });
+
+      request.send();
+    });
+
+  }
+  </script>
+  <div class='column'>
+    <div class='card' >
+      <h5 class='cardtitle'>Sports</h5>
+      <select id="sports" name='sport' class='dropdown' >
+        <% @sports.each do |pair| %>
+          <option value="<%= pair[0] %>"><%= pair[0] %></option>
+        <% end %>
+      </select>
+      <div class='buttonpair'>
+        <a href='/sport/new'><button class='button'>Add</button></a>
+        <button class='button'>Delete</button>
+      </div>
+    </div>
+    <div class='card'>
+      <h5 class='cardtitle'>Leagues</h5>
+        <select name='league' class='dropdown' id='leagues'>
+        </select>
+      <div class='buttonpair'>
+        <a href='/league/new'><button class='button'>Add</button></a>
+        <button class='button'>Delete</button>
+      </div>
+
+    </div>
+
+    <div class='card'>
+      <h5 class='cardtitle'>Teams</h5>
+      <select name='team' id="teams" class='dropdown'>
+      </select>
+      <div class='buttonpair'>
+        <button class='button'>Add</button>
+        <button class='button'>Delete</button>
+      </div>
+    </div>
+
+    <div class='card'>
+      <h5 class='cardtitle'>Games</h5>
+      <select name='game' class='dropdown'>
+      </select>
+      <div class='buttonpair'>
+        <button class='button'>Add</button>
+        <button class='button'>Delete</button>
+      </div>
+    </div>
   </div>
+  
+  <div class='column'>
+    <div class='card'>
+      <h5 class='cardtitle'>Players</h5>
+      <select name='player' class='dropdown'>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+      </select>
+      <div class='buttonpair'>
+        <button class='button'>Add</button>
+        <button class='button'>Delete</button>
+        <button class='button'>Assign to team</button>
+      </div>
+    </div>
+
+    <div class='card'>
+      <h5 class='cardtitle'>Coaches</h5>
+      <select name='coach' class='dropdown'>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+      </select>
+      <div class='buttonpair'>
+        <button class='button'>Add</button>
+        <button class='button'>Delete</button>
+        <button class='button'>Assign to team</button>
+      </div>
+    </div>
+
+    <div class='card'>
+      <div class='buttonpair'>
+        <button class='button'>Show Schedule</button>
+        <button class='button'>Show Roster</button>
+      </div>
+    </div>
+  </div>
+</div>

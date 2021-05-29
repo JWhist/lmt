@@ -131,7 +131,7 @@ class DBController
   end
 
   def delete_sport!(admin_id, name)
-    sql = "DELETE FROM sports WHERE (admin_id = $1 AND name = $2);"
+    sql = "DELETE FROM sports WHERE admin_id = $1 AND name = $2;"
     @conn.exec_params(sql, [admin_id, name])
   end
 
@@ -368,8 +368,8 @@ class DBController
   def team_schedule(admin_id, team_id)
     sql = <<~SQL
     SELECT gameday as Date, venue as Location,  
-    (SELECT name as Home FROM teams WHERE teams.id = hometeam_id), 
-    (SELECT name as Away FROM teams WHERE teams.id = awayteam_id) 
+    (SELECT name as Home FROM teams WHERE teams.id = hometeam_id) as Home, 
+    (SELECT name as Away FROM teams WHERE teams.id = awayteam_id) as Away 
     FROM games JOIN teams ON
     games.awayteam_id = teams.id OR
     games.hometeam_id = teams.id WHERE

@@ -1,129 +1,28 @@
 <header>Admin Page</header>
 <div id='maincontainer'>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const sports = document.getElementById("sports");
-  
-      sports.addEventListener('change', (event) => {
-        event.preventDefault();
-        const options = event.target.options;
-        const res = document.querySelector('#leagues');
-        
-        let request = new XMLHttpRequest();
-                
-        request.open('POST', `/leagues?sport=${options[event.target.selectedIndex].value}`);
-  
-        request.addEventListener("load", (e) => {
-          e.preventDefault();
-          let options = JSON.parse(request.responseText);
- 
-          if (res.innerHTML)res.innerHTML = '';
-          options[1].forEach((option, i) => {
-            let op = document.createElement('option');
-            op.value = option[1];
-            op.innerText = op.value;
-
-            res.appendChild(op);
-          });
-          makeTeams();
-        });
-  
-        request.send();
-        
-      });
-    });
-  </script>
-  <script>
-  function makeTeams() {
-    const leagues = document.getElementById("leagues");
-    console.log("working")
-    leagues.addEventListener('change', (event) => {
-      event.preventDefault();
-     
-      const options = event.target.options;
-      console.log(options);
-      const res = document.querySelector('#teams');
-      
-      let request = new XMLHttpRequest();
-              
-      request.open('POST', `/teams?league=${options[event.target.selectedIndex].value}`);
-
-      request.addEventListener("load", (e) => {
-        e.preventDefault();
-      
-        let options = JSON.parse(request.responseText);
-
-        if (res.innerHTML)res.innerHTML = '';
-        options[1].forEach((option, i) => {
-          let op = document.createElement('option');
-          op.value = option[1];
-          op.innerText = op.value;
-
-          res.appendChild(op);
-        });
-
-        
-        makeGames();
-      });
-
-      request.send();
-    });
-
-  }
-  </script>
-  <script>
-  function makeGames() {
-    const sports = document.getElementById("leagues");
-
-    sports.addEventListener('change', (event) => {
-      event.preventDefault();
-      const options = event.target.options;
-      const res = document.querySelector('#games');
-      
-      let request = new XMLHttpRequest();
-              
-      request.open('POST', `/games?team=${options[event.target.selectedIndex].value}`);
-
-      request.addEventListener("load", (e) => {
-        e.preventDefault();
-      
-        let options = JSON.parse(request.responseText);
-
-        if (res.innerHTML)res.innerHTML = '';
-        options[1].forEach((option, i) => {
-          let op = document.createElement('option');
-          op.value = option[1];
-          op.innerText = op.value;
-
-          res.appendChild(op);
-        });
-      });
-
-      request.send();
-    });
-
-  }
-  </script>
   <div class='column'>
     <div class='card' >
       <h5 class='cardtitle'>Sports</h5>
       <select id="sports" name='sport' class='dropdown' >
+        <option value="" disabled selected hidden>Select a sport</option>
         <% @sports.each do |pair| %>
           <option value="<%= pair[0] %>"><%= pair[0] %></option>
         <% end %>
       </select>
       <div class='buttonpair'>
         <a href='/sport/new'><button class='button'>Add</button></a>
-        <button class='button'>Delete</button>
+        <button class='button' id='deletesportbtn' onclick="deleteSport()">Delete</button>
       </div>
     </div>
     <div class='card'>
       <h5 class='cardtitle'>Leagues</h5>
         <select name='league' class='dropdown' id='leagues'>
+        <option value="" disabled selected hidden>Select a league</option>
+
         </select>
       <div class='buttonpair'>
         <a href='/league/new'><button class='button'>Add</button></a>
-        <button class='button'>Delete</button>
+        <button class='button' id='deleteleaguebtn' onclick="deleteLeague()">Delete</button>
       </div>
 
     </div>
@@ -131,19 +30,20 @@
     <div class='card'>
       <h5 class='cardtitle'>Teams</h5>
       <select name='team' id="teams" class='dropdown'>
+        <option value="" disabled selected hidden>Select a team</option>
+
       </select>
       <div class='buttonpair'>
-        <button class='button'>Add</button>
+        <a href='/team/new'><button class='button'>Add</button></a>
         <button class='button'>Delete</button>
       </div>
     </div>
 
     <div class='card'>
       <h5 class='cardtitle'>Games</h5>
-      <select name='game' class='dropdown'>
-      </select>
+      <p id='games'></p>
       <div class='buttonpair'>
-        <button class='button'>Add</button>
+        <a href='/game/new'><button class='button'>Add</button></a>
         <button class='button'>Delete</button>
       </div>
     </div>
@@ -186,3 +86,4 @@
     </div>
   </div>
 </div>
+<script src='/javascript/dropdowns.js'></script>

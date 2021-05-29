@@ -1,0 +1,17 @@
+<h3>Create a new sport:</h3>
+<h5>
+  <% if session[:message] %>
+    <%= session.delete(:message) %>
+  <% end %>
+</h5>
+
+<form action='/sport/new' method='post'>
+  <ul>
+    <li>
+      <label for='name'>Sport:</label>
+      <input type='text' name='name' placeholder='Sport Name' required>
+    </li>
+      <button class='button' type='submit'>Create</button>
+      <button class='button' type='reset' onclick="location.href='/admin'">Back</button>
+  </ul>
+</form>

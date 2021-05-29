@@ -6,14 +6,8 @@ require 'tilt/erubis'
 require 'sinatra/contrib'
 require 'bcrypt'
 require 'date'
-require_relative './lib/admin'
-require_relative './lib/coach'
 require_relative './lib/dbcontroller'
-require_relative './lib/game'
-require_relative './lib/league'
-require_relative './lib/player'
-require_relative './lib/sport'
-require_relative './lib/team'
+
 
 configure do
   enable :sessions
@@ -106,9 +100,9 @@ end
 # "HOME" page
 get '/admin' do
   require_signed_in_admin
+
   admin_id = session[:admin_id]
   sport_name = params[:sport]
-  puts sport_name
   @sports = @db.sports(admin_id)
 
   if sport_name
@@ -154,25 +148,43 @@ end
 # Sport routes
 get '/sport/new' do
   require_signed_in_admin
+
+  erb :newsport
 end
+
 get '/sport' do
   require_signed_in_admin
 end
+
 post '/sport/new' do
   require_signed_in_admin
+
   admin_id = session[:admin_id]
   name = params[:name]
   @db.create_sport!(admin_id, name)
 
-  # redirect '/admin'
+  redirect '/admin'
 end
+
 post '/sport/delete' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  sport = params[:sport]
+  @db.delete_sport!(admin_id, sport)
+  params[:sport] = nil
+
+  redirect '/admin'
 end
 
 # League routes
 get '/league/new' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  @sports = @db.sports(admin_id)
+
+  erb :newleague
 end
 
 post '/leagues' do
@@ -188,14 +200,35 @@ end
 
 post '/league/new' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  sport = params[:sport]
+  sport_id = @db.sport_id(admin_id, sport)
+  league_name = params[:league_name]
+  @db.create_league!(admin_id, sport_id, league_name)
+
+  redirect '/admin'
 end
+
 post '/league/delete' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  league = params[:league]
+  @db.delete_league!(admin_id, league)
+  params[:league] = nil
+
+  redirect '/admin'
 end
 
 # Team routes
 get '/team/new' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  @sports = @db.sports(admin_id)
+
+  erb :newteam
 end
 get '/teams' do
   require_signed_in_admin
@@ -211,8 +244,18 @@ post '/teams' do
 
   @db.teams(admin_id, league_id).to_json
 end
+
 post '/team/new' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  league = params[:league]
+  league_id = @db.league_id(admin_id, league)
+  team_name = params[:team_name]
+
+  @db.create_team!(admin_id, league_id, team_name)
+
+  redirect '/admin'
 end
 post '/team/delete' do
   require_signed_in_admin
@@ -249,13 +292,45 @@ end
 # Game routes
 get '/game/new' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  @sports = @db.sports(admin_id)
+
+  erb :newgame
 end
+
 get '/game' do
   require_signed_in_admin
 end
+
 post '/game/new' do
   require_signed_in_admin
+  admin_id = session[:admin_id]
+  date = format_date(params[:date])
+  venue = params[:venue]
+  hometeam = params[:hometeam]
+  awayteam = params[:awayteam]
+  hid = @db.team_id(admin_id, hometeam)
+  aid = @db.team_id(admin_id, awayteam)
+
+  options = { admin_id: admin_id, date: date, venue: venue, hid: hid, aid: aid }
+  puts options
+  @db.create_game!(options)
+
+  redirect '/admin'
 end
+
+post '/games' do
+  content_type :json
+  require_signed_in_admin
+
+  team = params[:team]
+  admin_id = session[:admin_id]
+  team_id = @db.team_id(admin_id, team)
+
+  @db.team_schedule(admin_id, team_id).to_json
+end
+
 post '/game/delete' do
   require_signed_in_admin
 end

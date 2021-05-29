@@ -324,9 +324,15 @@ class DBController
     @conn.exec_params(sql, [admin_id, date, venue, hs, as, hid, aid])
   end
 
-  def delete_game!(admin_id, date)
-    sql = "DELETE FROM games WHERE admin_id = $1 AND gameday = $2;"
-    @conn.exec_params(sql, [admin_id, date])
+  def delete_game!(admin_id, date, team_id)
+    sql = <<~SQL
+    DELETE FROM games WHERE admin_id = $1 
+    AND gameday = $2 
+    AND (awayteam_id = $3
+    OR hometeam_id = $3);
+    SQL
+
+    @conn.exec_params(sql, [admin_id, date, team_id])
   end
   # --------------------------------------------------------------------
   # GET PLAYER ROSTER

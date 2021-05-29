@@ -216,7 +216,6 @@ post '/league/delete' do
   admin_id = session[:admin_id]
   league = params[:league]
   @db.delete_league!(admin_id, league)
-  params[:league] = nil
 
   redirect '/admin'
 end
@@ -230,8 +229,11 @@ get '/team/new' do
 
   erb :newteam
 end
-get '/teams' do
+get '/team/schedule' do
   require_signed_in_admin
+  admin_id = session[:admin_id]
+
+  erb :schedule
 end
 
 post '/teams' do
@@ -257,8 +259,15 @@ post '/team/new' do
 
   redirect '/admin'
 end
+
 post '/team/delete' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  team = params[:team]
+  @db.delete_team!(admin_id, team)
+
+  redirect '/admin'
 end
 
 # Coach routes
@@ -299,10 +308,6 @@ get '/game/new' do
   erb :newgame
 end
 
-get '/game' do
-  require_signed_in_admin
-end
-
 post '/game/new' do
   require_signed_in_admin
   admin_id = session[:admin_id]
@@ -333,4 +338,16 @@ end
 
 post '/game/delete' do
   require_signed_in_admin
+  admin_id = session[:admin_id]
+
+  date = params[:date]
+  team = params[:team]
+
+  team_id = @db.team_id(admin_id, team)
+
+  p date, team, team_id
+
+  @db.delete_game!(admin_id, date, team_id)
+
+  redirect '/admin'
 end

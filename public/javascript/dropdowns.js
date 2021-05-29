@@ -96,11 +96,14 @@ function makeGames() {
       e.preventDefault();
       let options = JSON.parse(request.responseText);
       console.log(options);
+      let l = options[1].length
+      res.size = l;
       if (res.innerHTML) res.innerHTML = '';
       
       options[1].forEach((game, i) => {
-        let op = document.createElement('p');
-        op.innerText = `Date: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}`;
+        let op = document.createElement('option');
+        op.value = game[0];
+        op.innerText = `\nDate: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;
         res.appendChild(op);
       });
     });
@@ -109,4 +112,32 @@ function makeGames() {
   });
 }
 
-  
+function fillDates() {
+  const teams = document.getElementById("teams");
+
+  teams.addEventListener('input', (event) => {
+    event.preventDefault();
+    const options = event.target.options;
+    const res = document.querySelector("#deldate");
+    let request = new XMLHttpRequest();
+              
+    request.open('POST', `/games?team=${options[event.target.selectedIndex].value}`);
+
+    request.addEventListener("load", (e) => {
+      e.preventDefault();
+      let options = JSON.parse(request.responseText);
+      console.log(options);
+
+      if (res.innerHTML) res.innerHTML = '';
+      
+      options[1].forEach((game, i) => {
+        let op = document.createElement('option');
+        op.value = game[0];
+        op.innerText = op.value;
+        res.appendChild(op);
+      });
+    });
+    console.log('C');
+    request.send();
+  });
+}

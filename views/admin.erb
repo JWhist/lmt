@@ -31,20 +31,22 @@
       <h5 class='cardtitle'>Teams</h5>
       <select name='team' id="teams" class='dropdown'>
         <option value="" disabled selected hidden>Select a team</option>
-
       </select>
       <div class='buttonpair'>
         <a href='/team/new'><button class='button'>Add</button></a>
-        <button class='button'>Delete</button>
+        <button class='button' id='deleteteambtn' onclick="deleteTeam()">Delete</button>
       </div>
     </div>
 
     <div class='card'>
       <h5 class='cardtitle'>Games</h5>
-      <p id='games'></p>
+      <select id='games' name='game' class='dropdown'>
+      </select>
       <div class='buttonpair'>
         <a href='/game/new'><button class='button'>Add</button></a>
-        <button class='button'>Delete</button>
+        <button class='button' id='deletegamebtn' onclick='deleteGame()'>Delete</button>
+        <a href='/team/schedule'><button class='button'>Printable Schedule</button></a>
+
       </div>
     </div>
   </div>
@@ -80,8 +82,8 @@
 
     <div class='card'>
       <div class='buttonpair'>
-        <button class='button'>Show Schedule</button>
         <button class='button'>Show Roster</button>
+        <a href='/logout'><button class='button'>Log Out</button></a>
       </div>
     </div>
   </div>

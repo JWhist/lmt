@@ -39,14 +39,22 @@ html {
 
 .dropdown .button {
   display: inline;
+  cursor: pointer;
 }
 
-
-
-
-
-
-
+#games {
+  width: 250px;
+  border: 1px solid green;
+  border-radius: 3px;
+}
+option {
+  border: 1px solid green;
+  border-radius: 3px;
+  margin: 2px;
+  padding: 2px;
+  width: auto;
+  height: auto;
+}
 
 #cancelModal {
   display: none; /* Hidden by default */

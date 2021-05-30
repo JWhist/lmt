@@ -365,5 +365,7 @@ post '/game/delete' do
   @db.delete_game!(admin_id, date, team_id)
 
   session[:message] = 'Game deleted'
-  redirect '/admin'
+  
+  @sports = @db.sports(admin_id)
+  erb :admin
 end

@@ -36,6 +36,34 @@ function deleteGame() {
   
   let request = new XMLHttpRequest();
   request.open('POST', `/game/delete?team=${team}&date=${date}`);
-  request.addEventListener('load', e => location = '/admin');
+  request.addEventListener('load', (e) => {
+    e.preventDefault();
+    fillGames();
+  })
+  request.send();
+}
+function fillGames() {
+  const teamsMenu = document.getElementById("teams");
+  let team = teamsMenu.value;
+  const res = document.querySelector('#games');
+  let request = new XMLHttpRequest();
+            
+  request.open('POST', `/games?team=${team}`);
+
+  request.addEventListener("load", (e) => {
+    e.preventDefault();
+    let options = JSON.parse(request.responseText);
+    console.log(options);
+    let l = options[1].length
+    if (res.innerHTML) res.innerHTML = '';
+    res.size = l + 1;
+
+    options[1].forEach((game, i) => {
+      let op = document.createElement('option');
+      op.value = game[0];
+      op.innerText = `\nDate: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;
+      res.appendChild(op);
+    });
+  });
   request.send();
 }

@@ -1,12 +1,11 @@
-<header><h1>League Management Tool - <%= @username %>
+<div class='admincontainer'>
+  <header><h1>League Management Tool - <%= @username %>
   <% if session[:message] %>
-    <h1 class='message'><%= session.delete(:message) %></h1>
+   <h1 class='message'><%= session.delete(:message) %></h1>
   <% end %>
   </h1>
-</header>
-<div class='maincontainer'>
+  </header>  
 
-    
   <div class='column'>
     <div class='card' >
       <h5 class='cardtitle'>Sports</h5>

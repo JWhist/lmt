@@ -90,7 +90,7 @@ function fillGames() {
     options[1].forEach((game, i) => {
       let op = document.createElement('option');
       op.value = game[0];
-      op.innerText = `\nDate: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;
+      op.innerText = `Date: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;
       res.appendChild(op);
     });
   });
@@ -113,7 +113,7 @@ function fillPlayers() {
     players.forEach(player => {
       let op = document.createElement('option');
       op.value = player[3];
-      op.innerText = `\nName: ${player[0]}\nEmail: ${player[1]}\nPhone: ${player[2]}`;
+      op.innerText = `Name: ${player[0]}\nEmail: ${player[1]}\nPhone: ${player[2]}`;
       res.appendChild(op);
     });
   });
@@ -134,7 +134,7 @@ function fillCoaches() {
     coaches.forEach(coach => {
       let op = document.createElement('option');
       op.value = coach[3];
-      op.innerText = `\nName: ${coach[0]}\nEmail: ${coach[1]}\nPhone: ${coach[2]}`;
+      op.innerText = `Name: ${coach[0]}\nEmail: ${coach[1]}\nPhone: ${coach[2]}`;
       res.appendChild(op);
     });
   });

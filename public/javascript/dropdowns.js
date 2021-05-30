@@ -58,6 +58,7 @@ function makeTeams() {
       });
       console.log('B');
       makeGames();
+      makeTeamsTwo();
     });
 
     request.send();
@@ -76,6 +77,10 @@ function makeTeamsTwo() {
       e.preventDefault();
       let options = JSON.parse(request.responseText);
       if (res.innerHTML) res.innerHTML = '';
+      let op = document.createElement('option');
+      op.value = '';
+      op.innerText = 'Please select a Team';
+      res.appendChild(op);
       options.forEach((option, i) => {
         let op = document.createElement('option');
         op.value = option[1];
@@ -83,7 +88,6 @@ function makeTeamsTwo() {
         res.appendChild(op);
       });
       console.log('B');
-      makeGames();
     });
 
     request.send();
@@ -112,7 +116,7 @@ function makeGames() {
       options[1].forEach((game, i) => {
         let op = document.createElement('option');
         op.value = game[0];
-        op.innerText = `\nDate: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;
+        op.innerText = `Date: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;
         res.appendChild(op);
       });
     });

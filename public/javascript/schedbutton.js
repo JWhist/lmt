@@ -3,7 +3,7 @@ function getSchedule() {
   let league = leagueMenu.value;
   
   if (!league) return;
-  location = `/league/schedule?league=${league}`;
+  window.open(`/league/schedule?league=${league}`, '_blank');
 }
 
 function getRoster() {
@@ -11,7 +11,7 @@ function getRoster() {
   let team = teamMenu.value;
 
   if (!team) return;
-  location = `/team/roster?team=${team}`;
+  window.open(`/team/roster?team=${team}`, '_blank');
 }
 
 function assignPlayerToTeam() {
@@ -67,6 +67,8 @@ function removeCoachFromTeam() {
   const teamsMenu = document.getElementById('teams');
   const coach_id = coachesMenu.value;
   const team = teamsMenu.value;
+
+  if (coach_id === undefined || team === undefined) return;
 
   let request = new XMLHttpRequest();
 

@@ -4,7 +4,6 @@
     <% if session[:message] %>
       <h5 class='message'><%= session.delete(:message) %></h5>
     <% end %>
-  <img src='/images/who.jpg' style='height: 400px; width: 300px;'>
 </div>
 <div class='column'>
 <form action='/game/new' method='post'>
@@ -40,7 +39,7 @@
     </li>
     <li>
       <label for='venue'>Location:</label>
-      <input type='text' name='venue' required>
+      <input type='text' name='venue' placeholder='Location' required>
     </li>
     <li>
       <button class='button' type='submit'>Create</button>

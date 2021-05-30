@@ -387,4 +387,17 @@ class DBController
     
     [result.fields, result.values]
   end
+  # --------------------------------------------------------------------
+  # GET LEAGUE SCHEDULE
+  # --------------------------------------------------------------------
+  def league_schedule(admin_id, league_id)
+    games = []
+    teams = teams(admin_id, league_id) # array of team IDs and names
+    teams.each do |team|
+      team_schedule(admin_id, team[0])[1].each do |game|
+        games << game
+      end
+    end
+    games.uniq.sort_by { |x| x[0] }
+  end
 end

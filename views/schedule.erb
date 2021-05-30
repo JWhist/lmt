@@ -1,1 +1,17 @@
-<h2>To be created</h2>
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Location</th>
+    <th>Home Team</th>
+    <th>Away Team</th>
+  </tr>
+<% @schedule.each do |game| %>
+  <tr>
+    <td><%= game[0]%></td>
+    <td><%= game[1]%></td>
+    <td><%= game[2]%></td>
+    <td><%= game[3]%></td>
+  </tr>
+<% end %>
+</table>
+<button class='button' type='reset' onclick="location.href='/admin'">Back</button>

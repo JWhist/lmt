@@ -1,9 +1,11 @@
-<h3>Create a new sport:</h3>
-<h5>
-  <% if session[:message] %>
-    <%= session.delete(:message) %>
-  <% end %>
-</h5>
+<div class='maincontainer'>
+  <div>
+    <h3>Create a new sport:</h3>
+        <% if session[:message] %>
+          <h5 class='message'><%= session.delete(:message) %></h5>
+        <% end %>
+    <img src='/images/who.jpg' style='height: 400px; width: 300px;'>
+  </div>
 
 <form action='/sport/new' method='post'>
   <ul>
@@ -11,7 +13,10 @@
       <label for='name'>Sport:</label>
       <input type='text' name='name' placeholder='Sport Name' required>
     </li>
+    <li>
       <button class='button' type='submit'>Create</button>
       <button class='button' type='reset' onclick="location.href='/admin'">Back</button>
+    </li>
   </ul>
 </form>
+</div>

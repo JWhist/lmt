@@ -8,20 +8,25 @@ CREATE TABLE sports (
   id SERIAL PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
   admin_id INTEGER REFERENCES admins (id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE leagues (
   id SERIAL PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
-  sport_id INTEGER REFERENCES sports (id),
+  sport_id INTEGER REFERENCES sports (id)
+  ON DELETE CASCADE,
   admin_id INTEGER REFERENCES admins (id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE teams (
   id SERIAL PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
-  league_id INTEGER REFERENCES leagues (id),
+  league_id INTEGER REFERENCES leagues (id)
+  ON DELETE CASCADE,
   admin_id INTEGER REFERENCES admins (id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE players (
@@ -30,6 +35,7 @@ CREATE TABLE players (
   email TEXT,
   phone TEXT,
   admin_id INTEGER REFERENCES admins (id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE coaches (
@@ -38,6 +44,7 @@ CREATE TABLE coaches (
   email TEXT,
   phone TEXT,
   admin_id INTEGER REFERENCES admins (id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE games (
@@ -46,19 +53,26 @@ CREATE TABLE games (
   venue TEXT,
   homescore TEXT,
   awayscore TEXT,
-  hometeam_id INTEGER REFERENCES teams (id),
-  awayteam_id INTEGER REFERENCES teams (id),
+  hometeam_id INTEGER REFERENCES teams (id)
+  ON DELETE CASCADE,
+  awayteam_id INTEGER REFERENCES teams (id)
+  ON DELETE CASCADE,
   admin_id INTEGER REFERENCES admins (id)
+  ON DELETE CASCADE
 );
 
 CREATE TABLE teams_players (
-  team_id INTEGER REFERENCES teams (id),
-  player_id INTEGER REFERENCES players (id),
+  team_id INTEGER REFERENCES teams (id)
+  ON DELETE CASCADE,
+  player_id INTEGER REFERENCES players (id)
+  ON DELETE CASCADE,
   admin_id INTEGER REFERENCES admins (id)
 );
 
 CREATE TABLE teams_coaches (
-  team_id INTEGER REFERENCES teams (id),
-  coach_id INTEGER REFERENCES coaches (id),
+  team_id INTEGER REFERENCES teams (id)
+  ON DELETE CASCADE,
+  coach_id INTEGER REFERENCES coaches (id)
+  ON DELETE CASCADE,
   admin_id INTEGER REFERENCES admins (id)
 );

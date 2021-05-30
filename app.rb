@@ -74,6 +74,7 @@ post '/login' do
   
   if @db.user_is_verified?(username, password)
     session[:message] = "Welcome Back, #{username}!"
+    session[:username] = username
     session[:admin_id] = @db.admin_id(username)
     
     redirect "/admin"
@@ -100,7 +101,8 @@ end
 # "HOME" page
 get '/admin' do
   require_signed_in_admin
-
+  
+  @username = session[:username]
   admin_id = session[:admin_id]
   sport_name = params[:sport]
   @sports = @db.sports(admin_id)
@@ -163,6 +165,7 @@ post '/sport/new' do
   name = params[:name]
   @db.create_sport!(admin_id, name)
 
+  session[:message] = 'New sport created'
   redirect '/admin'
 end
 
@@ -171,9 +174,10 @@ post '/sport/delete' do
 
   admin_id = session[:admin_id]
   sport = params[:sport]
+  
   @db.delete_sport!(admin_id, sport)
-  params[:sport] = nil
-
+  
+  session[:message] = 'Sport deleted'
   redirect '/admin'
 end
 
@@ -207,6 +211,7 @@ post '/league/new' do
   league_name = params[:league_name]
   @db.create_league!(admin_id, sport_id, league_name)
 
+  session[:message] = 'New league created'
   redirect '/admin'
 end
 
@@ -215,8 +220,10 @@ post '/league/delete' do
 
   admin_id = session[:admin_id]
   league = params[:league]
+
   @db.delete_league!(admin_id, league)
 
+  session[:message] = 'League deleted'
   redirect '/admin'
 end
 
@@ -229,9 +236,15 @@ get '/team/new' do
 
   erb :newteam
 end
-get '/team/schedule' do
+
+get '/league/schedule' do
   require_signed_in_admin
+
   admin_id = session[:admin_id]
+  league = params[:league]
+  league_id = @db.league_id(admin_id, league)
+
+  @schedule = @db.league_schedule(admin_id, league_id)
 
   erb :schedule
 end
@@ -257,6 +270,7 @@ post '/team/new' do
 
   @db.create_team!(admin_id, league_id, team_name)
 
+  session[:message] = 'New team created'
   redirect '/admin'
 end
 
@@ -265,8 +279,10 @@ post '/team/delete' do
 
   admin_id = session[:admin_id]
   team = params[:team]
+
   @db.delete_team!(admin_id, team)
 
+  session[:message] = 'Team deleted'
   redirect '/admin'
 end
 
@@ -319,9 +335,9 @@ post '/game/new' do
   aid = @db.team_id(admin_id, awayteam)
 
   options = { admin_id: admin_id, date: date, venue: venue, hid: hid, aid: aid }
-  puts options
   @db.create_game!(options)
 
+  session[:message] = 'New game created'
   redirect '/admin'
 end
 
@@ -345,9 +361,9 @@ post '/game/delete' do
 
   team_id = @db.team_id(admin_id, team)
 
-  p date, team, team_id
 
   @db.delete_game!(admin_id, date, team_id)
 
+  session[:message] = 'Game deleted'
   redirect '/admin'
 end

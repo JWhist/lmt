@@ -1,5 +1,12 @@
-<header>Admin Page</header>
-<div id='maincontainer'>
+<header><h1>League Management Tool - <%= @username %>
+  <% if session[:message] %>
+    <h1 class='message'><%= session.delete(:message) %></h1>
+  <% end %>
+  </h1>
+</header>
+<div class='maincontainer'>
+
+    
   <div class='column'>
     <div class='card' >
       <h5 class='cardtitle'>Sports</h5>
@@ -10,18 +17,17 @@
         <% end %>
       </select>
       <div class='buttonpair'>
-        <a href='/sport/new'><button class='button'>Add</button></a>
+        <button class='button' onclick="location.href='/sport/new'">Add</button>
         <button class='button' id='deletesportbtn' onclick="deleteSport()">Delete</button>
       </div>
     </div>
     <div class='card'>
       <h5 class='cardtitle'>Leagues</h5>
         <select name='league' class='dropdown' id='leagues'>
-        <option value="" disabled selected hidden>Select a league</option>
-
+          <option value="" disabled selected hidden>Select a league</option>
         </select>
       <div class='buttonpair'>
-        <a href='/league/new'><button class='button'>Add</button></a>
+        <button class='button' onclick="location.href='/league/new'">Add</button>
         <button class='button' id='deleteleaguebtn' onclick="deleteLeague()">Delete</button>
       </div>
 
@@ -33,20 +39,20 @@
         <option value="" disabled selected hidden>Select a team</option>
       </select>
       <div class='buttonpair'>
-        <a href='/team/new'><button class='button'>Add</button></a>
+        <button class='button' onclick="location.href='/team/new'">Add</button>
         <button class='button' id='deleteteambtn' onclick="deleteTeam()">Delete</button>
       </div>
     </div>
 
     <div class='card'>
       <h5 class='cardtitle'>Games</h5>
-      <select id='games' name='game' class='dropdown'>
+      <select id='games' name='game' size='10'>
+        <option value="" disabled selected hidden></option>
       </select>
       <div class='buttonpair'>
-        <a href='/game/new'><button class='button'>Add</button></a>
+        <button class='button' onclick="location.href='/game/new'">Add</button>
         <button class='button' id='deletegamebtn' onclick='deleteGame()'>Delete</button>
-        <a href='/team/schedule'><button class='button'>Printable Schedule</button></a>
-
+        <button class='button' id='schedbutton' onclick='getSchedule()'>Printable Schedule</button>
       </div>
     </div>
   </div>

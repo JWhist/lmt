@@ -1,9 +1,8 @@
+<div class='maincontainer'>
 <h3>Create a new admin:</h3>
-<h5>
   <% if session[:message] %>
-    <%= session.delete(:message) %>
+    <h5 class='message'><%= session.delete(:message) %></h5>
   <% end %>
-</h5>
 
 <form action='/admin/new' method='post'>
   <ul>
@@ -19,3 +18,4 @@
       <button class='button' type='reset' onclick="location.href='/'">Back</button>
   </ul>
 </form>
+</div>

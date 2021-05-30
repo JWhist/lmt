@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
       let options = JSON.parse(request.responseText);
       console.log(options);
       if (res.innerHTML) res.innerHTML = '';
+      let op = document.createElement('option');
+      op.value = '';
+      op.innerText = 'Please select a League';
+      res.appendChild(op);
+      res.size = options.length;
       options.forEach((option, i) => {
         let op = document.createElement('option');
         op.value = option[1];
@@ -41,6 +46,10 @@ function makeTeams() {
       e.preventDefault();
       let options = JSON.parse(request.responseText);
       if (res.innerHTML) res.innerHTML = '';
+      let op = document.createElement('option');
+      op.value = '';
+      op.innerText = 'Please select a Team';
+      res.appendChild(op);
       options.forEach((option, i) => {
         let op = document.createElement('option');
         op.value = option[1];
@@ -97,9 +106,9 @@ function makeGames() {
       let options = JSON.parse(request.responseText);
       console.log(options);
       let l = options[1].length
-      res.size = l;
       if (res.innerHTML) res.innerHTML = '';
-      
+      res.size = l+1;
+
       options[1].forEach((game, i) => {
         let op = document.createElement('option');
         op.value = game[0];
@@ -107,7 +116,6 @@ function makeGames() {
         res.appendChild(op);
       });
     });
-    console.log('C');
     request.send();
   });
 }
@@ -129,7 +137,11 @@ function fillDates() {
       console.log(options);
 
       if (res.innerHTML) res.innerHTML = '';
-      
+      let op = document.createElement('option');
+      op.value = '';
+      op.innerText = 'Please select a Team';
+      res.appendChild(op);
+      res.size = options[1].length;
       options[1].forEach((game, i) => {
         let op = document.createElement('option');
         op.value = game[0];

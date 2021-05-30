@@ -289,29 +289,85 @@ end
 # Coach routes
 get '/coach/new' do
   require_signed_in_admin
+
+  erb :newcoach
 end
-get '/coach' do
+
+post '/coaches' do
+  content_type :json
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+
+  @db.coaches(admin_id).to_json
 end
+
 post '/coach/new' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  coach_name = params[:name]
+  coach_email = params[:email]
+  coach_phone = params[:phone]
+  options = { admin_id: admin_id, name: coach_name, 
+              email: coach_email, phone: coach_phone }
+
+  @db.create_coach!(options)
+
+  redirect '/admin'
 end
+
 post '/coach/delete' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  coach_id = params[:coach_id]
+
+  @db.delete_coach!(admin_id, coach_id)
 end
 
 # Player routes
 get '/player/new' do
   require_signed_in_admin
+
+  erb :newplayer
 end
+
 get '/player' do
   require_signed_in_admin
 end
+
+post '/players' do
+  content_type :json
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+
+  @db.players(admin_id).to_json
+end
+
 post '/player/new' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  player_name = params[:name]
+  player_email = params[:email]
+  player_phone = params[:phone]
+  options = { admin_id: admin_id, name: player_name, 
+              email: player_email, phone: player_phone }
+
+  @db.create_player!(options)
+
+  redirect '/admin'
 end
+
 post '/player/delete' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  player_id = params[:player_id]
+
+  @db.delete_player!(admin_id, player_id)
 end
 
 # Game routes

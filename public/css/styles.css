@@ -46,8 +46,9 @@ h1 {
 }
 
 .buttonpair {
-  display: inline;
-  border: 1px solid yellow;
+  display: inline-block;
+  border: 1px solid rgb(255, 0, 212);
+  margin: 10px;
 }
 
 .dropdown .button {
@@ -58,14 +59,20 @@ h1 {
   transform: scale(0.9);
 }
 
-#games {
+#games,
+#players {
   display: inline;
   width: 250px;
   border: 1px solid green;
   border-radius: 3px;
   overflow-x: hidden;
   overflow-y: scroll;
+  margin-bottom: 10px;
 }
+#players {
+  width: 90%;
+}
+
 option {
   border: 1px solid green;
   border-radius: 3px;

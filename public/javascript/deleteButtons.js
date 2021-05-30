@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded', () => {
+  fillPlayers();
+  fillCoaches();
+});
+
 function deleteSport() {
   let sportMenu = document.getElementById("sports");
   let sport = sportMenu.value;
@@ -42,6 +47,31 @@ function deleteGame() {
   })
   request.send();
 }
+
+function deletePlayer() {
+  let playersMenu = document.getElementById("players");
+  let player_id = playersMenu.value;
+  
+  let request = new XMLHttpRequest();
+  request.open('POST', `/player/delete?player_id=${player_id}`);
+  request.addEventListener('load', (e) => {
+    e.preventDefault();
+    fillPlayers();
+  })
+  request.send();
+}
+function deleteCoach() {
+  const coachesMenu = document.getElementById("coaches");
+  let coach_id = coachesMenu.value;
+  
+  let request = new XMLHttpRequest();
+  request.open('POST', `/coach/delete?coach_id=${coach_id}`);
+  request.addEventListener('load', (e) => {
+    e.preventDefault();
+    fillCoaches();
+  })
+  request.send();
+}
 function fillGames() {
   const teamsMenu = document.getElementById("teams");
   let team = teamsMenu.value;
@@ -53,7 +83,6 @@ function fillGames() {
   request.addEventListener("load", (e) => {
     e.preventDefault();
     let options = JSON.parse(request.responseText);
-    console.log(options);
     let l = options[1].length
     if (res.innerHTML) res.innerHTML = '';
     res.size = l + 1;
@@ -62,6 +91,50 @@ function fillGames() {
       let op = document.createElement('option');
       op.value = game[0];
       op.innerText = `\nDate: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;
+      res.appendChild(op);
+    });
+  });
+  request.send();
+}
+
+
+function fillPlayers() {
+  const res = document.querySelector('#players');
+  let request = new XMLHttpRequest();
+            
+  request.open('POST', '/players');
+
+  request.addEventListener("load", (e) => {
+    e.preventDefault();
+    let players = JSON.parse(request.responseText);
+    if (res.innerHTML) res.innerHTML = '';
+    res.size = players.length + 1;
+
+    players.forEach(player => {
+      let op = document.createElement('option');
+      op.value = player[3];
+      op.innerText = `\nName: ${player[0]}\nEmail: ${player[1]}\nPhone: ${player[2]}`;
+      res.appendChild(op);
+    });
+  });
+  request.send();
+}
+function fillCoaches() {
+  const res = document.querySelector('#coaches');
+  let request = new XMLHttpRequest();
+            
+  request.open('POST', '/coaches');
+
+  request.addEventListener("load", (e) => {
+    e.preventDefault();
+    let coaches = JSON.parse(request.responseText);
+    if (res.innerHTML) res.innerHTML = '';
+    res.size = coaches.length + 1;
+
+    coaches.forEach(coach => {
+      let op = document.createElement('option');
+      op.value = coach[3];
+      op.innerText = `\nName: ${coach[0]}\nEmail: ${coach[1]}\nPhone: ${coach[2]}`;
       res.appendChild(op);
     });
   });

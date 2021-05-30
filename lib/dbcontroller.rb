@@ -198,9 +198,9 @@ class DBController
     @conn.exec_params(sql, [admin_id, name, email, phone])
   end
 
-  def delete_player!(admin_id, name)
-    sql = "DELETE FROM players WHERE admin_id = $1 AND name = $2;"
-    @conn.exec_params(sql, [admin_id, name])
+  def delete_player!(admin_id, player_id)
+    sql = "DELETE FROM players WHERE admin_id = $1 AND id = $2;"
+    @conn.exec_params(sql, [admin_id, player_id])
   end
 
   def edit_player_info(options)
@@ -239,9 +239,9 @@ class DBController
   end
 
   def players(admin_id)
-    sql = "SELECT name, email, phone FROM players WHERE players.admin_id = $1;"
+    sql = "SELECT name, email, phone, id FROM players WHERE players.admin_id = $1;"
     result = @conn.exec_params(sql, [admin_id])
-    [result.fields, result.values]
+    result.values
   end
   # --------------------------------------------------------------------
   # COACHES
@@ -259,9 +259,9 @@ class DBController
     @conn.exec_params(sql, [admin_id, name, email, phone])
   end
 
-  def delete_coach!(admin_id, name)
-    sql = "DELETE FROM coaches WHERE admin_id = $1 AND name = $2;"
-    @conn.exec_params(sql, [admin_id, name])
+  def delete_coach!(admin_id, coach_id)
+    sql = "DELETE FROM coaches WHERE admin_id = $1 AND id = $2;"
+    @conn.exec_params(sql, [admin_id, coach_id])
   end
 
   def edit_coach_info(options = {})
@@ -300,9 +300,9 @@ class DBController
   end
 
   def coaches(admin_id)
-    sql = 'SELECT name, email, phone FROM coaches WHERE coaches.admin_id = $1;'
+    sql = 'SELECT name, email, phone, id FROM coaches WHERE coaches.admin_id = $1;'
     result = @conn.exec_params(sql, [admin_id])
-    [result.fields, result.values]
+    result.values
   end
   # --------------------------------------------------------------------
   # GAMES

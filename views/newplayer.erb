@@ -1,0 +1,31 @@
+
+<div class='maincontainer'>
+  <div>
+    <h3>Create a new player:</h3>
+        <% if session[:message] %>
+          <h5 class='message'><%= session.delete(:message) %></h5>
+        <% end %>
+    <img src='/images/who.jpg' style='height: 400px; width: 300px;'>
+  </div>
+
+<form action='/player/new' method='post'>
+  <ul>
+    <li>
+      <label for='name'>Name:</label>
+      <input type='text' name='name' placeholder='Player Name' required>
+    </li>
+    <li>
+      <label for='email'>Email:</label>
+      <input type='email' name='email' placeholder='Email'>
+    </li>
+    <li>
+      <label for='phone'>Phone:</label>
+      <input type='tel' name='phone' id='phone' pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder='123-456-7890'>
+    </li>
+    <li>
+      <button class='button' type='submit'>Create</button>
+      <button class='button' type='reset' onclick="location.href='/admin'">Back</button>
+    </li>
+  </ul>
+</form>
+</div>

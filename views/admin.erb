@@ -30,6 +30,9 @@
         <button class='button' onclick="location.href='/league/new'">Add</button>
         <button class='button' id='deleteleaguebtn' onclick="deleteLeague()">Delete</button>
       </div>
+      <div class='buttonpair' style='float:right'>
+        <button class='button' id='schedbutton' onclick='getSchedule()'>Printable Schedule</button>
+      </div>
 
     </div>
 
@@ -39,6 +42,7 @@
         <option value="" disabled selected hidden>Select a team</option>
       </select>
       <div class='buttonpair'>
+        <button class='button'>Show Roster</button>
         <button class='button' onclick="location.href='/team/new'">Add</button>
         <button class='button' id='deleteteambtn' onclick="deleteTeam()">Delete</button>
       </div>
@@ -46,13 +50,12 @@
 
     <div class='card'>
       <h5 class='cardtitle'>Games</h5>
-      <select id='games' name='game' size='10'>
+      <select id='games' name='game'>
         <option value="" disabled selected hidden></option>
       </select>
       <div class='buttonpair'>
         <button class='button' onclick="location.href='/game/new'">Add</button>
         <button class='button' id='deletegamebtn' onclick='deleteGame()'>Delete</button>
-        <button class='button' id='schedbutton' onclick='getSchedule()'>Printable Schedule</button>
       </div>
     </div>
   </div>
@@ -60,35 +63,30 @@
   <div class='column'>
     <div class='card'>
       <h5 class='cardtitle'>Players</h5>
-      <select name='player' class='dropdown'>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
+      <select id="players" name='player' class='dropdown'>
+        <option value="" disabled selected hidden></option>
       </select>
       <div class='buttonpair'>
-        <button class='button'>Add</button>
-        <button class='button'>Delete</button>
+        <button class='button' onclick="location.href='/player/new'">Add</button>
+        <button class='button' onclick='deletePlayer()'>Delete</button>
         <button class='button'>Assign to team</button>
       </div>
     </div>
 
     <div class='card'>
       <h5 class='cardtitle'>Coaches</h5>
-      <select name='coach' class='dropdown'>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
+      <select name='coach' id='coaches' class='dropdown'>
+        <option value="" disabled selected hidden></option>
       </select>
       <div class='buttonpair'>
-        <button class='button'>Add</button>
-        <button class='button'>Delete</button>
+        <button class='button' onclick="location.href='/coach/new'">Add</button>
+        <button class='button' onclick='deleteCoach()'>Delete</button>
         <button class='button'>Assign to team</button>
       </div>
     </div>
 
     <div class='card'>
-      <div class='buttonpair'>
-        <button class='button'>Show Roster</button>
+      <div class='buttonpair' style='float: right'>
         <a href='/logout'><button class='button'>Log Out</button></a>
       </div>
     </div>

@@ -286,6 +286,19 @@ post '/team/delete' do
   redirect '/admin'
 end
 
+get '/team/roster' do
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  team_name = params[:team]
+  team_id = @db.team_id(admin_id, team_name)
+
+  @players = @db.player_roster(admin_id, team_id)
+  @coaches = @db.coach_roster(admin_id, team_id)
+
+  erb :roster
+end
+
 # Coach routes
 get '/coach/new' do
   require_signed_in_admin
@@ -326,6 +339,34 @@ post '/coach/delete' do
   @db.delete_coach!(admin_id, coach_id)
 end
 
+post '/coach/assign' do
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  team_id = @db.team_id(admin_id, params[:team])
+  coach_id = params[:coach_id]
+  p admin_id, team_id, coach_id
+  
+  @db.assign_coach_to_team(admin_id, coach_id, team_id)
+  session[:message] = 'Coach assigned to team'
+
+  redirect '/admin'
+end
+
+post '/coach/remove' do
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  team_id = @db.team_id(admin_id, params[:team])
+  coach_id = params[:coach_id]
+  p admin_id, team_id, coach_id
+  
+  @db.remove_coach_from_team(admin_id, coach_id, team_id)
+  session[:message] = 'Coach removed from team'
+
+  redirect '/admin'
+end
+
 # Player routes
 get '/player/new' do
   require_signed_in_admin
@@ -333,8 +374,32 @@ get '/player/new' do
   erb :newplayer
 end
 
-get '/player' do
+post '/player/assign' do
   require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  team_id = @db.team_id(admin_id, params[:team])
+  player_id = params[:player_id]
+  p admin_id, team_id, player_id
+  
+  @db.assign_player_to_team(admin_id, player_id, team_id)
+  session[:message] = 'Player assigned to team'
+
+  redirect '/admin'
+end
+
+post '/player/remove' do
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  team_id = @db.team_id(admin_id, params[:team])
+  player_id = params[:player_id]
+  p admin_id, team_id, player_id
+  
+  @db.remove_player_from_team(admin_id, player_id, team_id)
+  session[:message] = 'Player removed from team'
+
+  redirect '/admin'
 end
 
 post '/players' do

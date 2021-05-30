@@ -69,7 +69,8 @@ h1 {
   overflow-y: scroll;
   margin-bottom: 10px;
 }
-#players {
+#players,
+#coaches {
   width: 90%;
 }
 
@@ -81,7 +82,8 @@ option {
 }
 
 table,
-td {
+td,
+tr {
   border-collapse: collapse;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
@@ -93,6 +95,9 @@ table {
   border: 1px solid black;
   font-style: italic;
   margin-bottom: 10px;
+}
+th {
+  text-align: center;
 }
 #cancelModal {
   display: none; /* Hidden by default */

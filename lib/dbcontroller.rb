@@ -339,34 +339,32 @@ class DBController
   # --------------------------------------------------------------------
   def player_roster(admin_id, team_id)
     sql = <<~SQL
-    SELECT players.name AS Name, players.email AS Email, players.phone AS Phone
-    FROM players JOIN teams ON
-    players.admin_id = teams.admin_id
-    WHERE
-    players.admin_id = $1
-    AND
-    teams.id = $2;
+    SELECT (SELECT name FROM players WHERE id = player_id) AS Name,
+           (SELECT email FROM players WHERE id = player_id) AS Email,
+           (SELECT phone FROM players WHERE id = player_id) AS Phone
+    FROM teams_players WHERE
+    admin_id = $1 AND
+    team_id = $2;
     SQL
 
     result = @conn.exec_params(sql, [admin_id, team_id])
-    [result.fields, result.values]
+    result.values
   end
   # --------------------------------------------------------------------
   # GET COACH ROSTER
   # --------------------------------------------------------------------
   def coach_roster(admin_id, team_id)
     sql = <<~SQL
-    SELECT coaches.name AS Name, coaches.email AS Email, coaches.phone AS Phone
-    FROM coaches JOIN teams ON
-    coaches.admin_id = teams.admin_id
-    WHERE
-    coaches.admin_id = $1
-    AND
-    teams.id = $2;
+    SELECT (SELECT name FROM coaches WHERE id = coach_id) AS Name,
+           (SELECT email FROM coaches WHERE id = coach_id) AS Email,
+           (SELECT phone FROM coaches WHERE id = coach_id) AS Phone
+    FROM teams_coaches WHERE
+    admin_id = $1 AND
+    team_id = $2;
     SQL
 
     result = @conn.exec_params(sql, [admin_id, team_id])
-    [result.fields, result.values]
+    result.values
   end
   # --------------------------------------------------------------------
   # GET TEAM SCHEDULE

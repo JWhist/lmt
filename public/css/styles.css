@@ -59,20 +59,17 @@ h1 {
   transform: scale(0.9);
 }
 
-#games,
-#players {
+#sports, #leagues, #teams, #coaches,
+#games, #players {
   display: inline;
-  width: 250px;
+  width: 90%;
   border: 1px solid green;
   border-radius: 3px;
   overflow-x: hidden;
   overflow-y: scroll;
   margin-bottom: 10px;
 }
-#players,
-#coaches {
-  width: 90%;
-}
+
 
 option {
   border: 1px solid green;

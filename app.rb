@@ -301,8 +301,8 @@ get '/team/roster' do
   require_signed_in_admin
 
   admin_id = session[:admin_id]
-  team_name = params[:team]
-  team_id = @db.team_id(admin_id, team_name)
+  @team_name = params[:team]
+  team_id = @db.team_id(admin_id, @team_name)
 
   @players = @db.player_roster(admin_id, team_id)
   @coaches = @db.coach_roster(admin_id, team_id)

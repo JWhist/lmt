@@ -7,10 +7,10 @@
 }
 
 *:focus {
-  outline: 0 !important;
+  outline-color:rgb(252, 248, 29);
 }
 *:focus:not(:focus-visible) {
-  outline: 0 !important;
+  outline-color:rgb(252, 248, 29);
 }
 
 header {

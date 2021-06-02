@@ -1,36 +1,36 @@
 <div class='maincontainer'>
-<div class='column'>
-<h3>Create a new team:</h3>
-  <% if session[:message] %>
-    <h5 class='message'><%= session.delete(:message) %></h5>
-  <% end %>
-  <img src='/images/who.jpg' style='height: 400px; width: 300px;'>
-</div>
-<div class='column'>
-<form action='/team/new' method='post'>
-  <ul>
-    <li>
-      <select id="sports" name='sport' class='dropdown' required>
-        <option value="" disabled selected hidden>Select a sport</option>
-        <% @sports.each do |pair| %>
-          <option value="<%= pair[0] %>"><%= pair[0] %></option>
-        <% end %>
-      </select>
-    </li>
-    <li>
-      <select id="leagues" name='league' class='dropdown' required>
-        <option value="" disabled selected hidden>Select a league</option>
-      </select>
-    </li>
-    <li>
-      <label for='team_name'>Team:</label>
-      <input type='text' name='team_name' placeholder='Team Name' required>
-    </li>
-    <li>
-      <button class='button' type='submit'>Create</button>
-      <button class='button' type='reset' onclick="location.href='/admin'">Back</button>
-    </li>
-  </ul>
-</form>
-</div>
+  <div class='column'>
+    <h3>Create a new team:</h3>
+      <% if session[:message] %>
+        <h5 class='message'><%= session.delete(:message) %></h5>
+      <% end %>
+  </div>
+
+  <div class='column'>
+    <form action='/team/new' method='post' autocomplete='off'>
+      <ul>
+        <li>
+          <select id="sports" name='sport' class='dropdown' required>
+            <option value disabled selected hidden>Select a sport</option>
+            <% @sports.each do |pair| %>
+              <option value="<%= pair[0] %>"><%= pair[0] %></option>
+            <% end %>
+          </select>
+        </li>
+        <li>
+          <select id="leagues" name='league' class='dropdown' required>
+            <option value="" disabled selected hidden>Select a league</option>
+          </select>
+        </li>
+        <li>
+          <label for='team_name'>Team:</label>
+          <input type='text' name='team_name' placeholder='Team Name' required>
+        </li>
+        <li>
+          <button class='button' type='submit'>Create</button>
+          <button class='button' type='reset' onclick="location.href='/admin'">Back</button>
+        </li>
+      </ul>
+    </form>
+  </div>
 </div>

@@ -107,10 +107,10 @@ get '/admin' do
   sport_name = params[:sport]
   @sports = @db.sports(admin_id)
 
-  if sport_name
-    sport_id = @db.sport_id(admin_id, sport_name)
-    @leagues = @db.leagues(admin_id, sport_id)
-  end
+  # if sport_name
+  #   sport_id = @db.sport_id(admin_id, sport_name)
+  #   @leagues = @db.leagues(admin_id, sport_id)
+  # end
 
   @title = 'LMT - Admin Home Page'
 
@@ -284,6 +284,17 @@ post '/team/delete' do
 
   session[:message] = 'Team deleted'
   redirect '/admin'
+end
+
+get '/admin/roster' do
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  @players = @db.conn.exec('SELECT name, email, phone FROM players;').values
+  @coaches = @db.conn.exec('SELECT name, email, phone FROM coaches;').values
+
+
+  erb :roster
 end
 
 get '/team/roster' do
@@ -489,4 +500,17 @@ post '/game/delete' do
   
   @sports = @db.sports(admin_id)
   erb :admin
+end
+
+post '/password/new' do
+  require_signed_in_admin
+
+  username = session[:username]
+  newpassword = BCrypt::Password.create(params[:password])
+
+  @db.change_admin_password(username, newpassword)
+
+  session[:message] = 'Admin password has been changed'
+  
+  redirect '/admin'
 end

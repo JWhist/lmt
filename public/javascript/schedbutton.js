@@ -26,6 +26,11 @@ function assignPlayerToTeam() {
 
   request.addEventListener('load', (e) => {
     e.preventDefault();
+    let message = document.getElementById('msg');
+    message.innerText = 'Player has been assigned';
+    setTimeout(() => {
+      message.innerText = '';
+    }, 2000);
   });
 
   request.send();
@@ -42,6 +47,11 @@ function assignCoachToTeam() {
 
   request.addEventListener('load', (e) => {
     e.preventDefault();
+    let message = document.getElementById('msg');
+    message.innerText = 'Coach has been assigned';
+    setTimeout(() => {
+      message.innerText = '';
+    }, 2000);
   });
 
   request.send();
@@ -58,6 +68,11 @@ function removePlayerFromTeam() {
 
   request.addEventListener('load', (e) => {
     e.preventDefault();
+    let message = document.getElementById('msg');
+    message.innerText = 'Player has been removed';
+    setTimeout(() => {
+      message.innerText = '';
+    }, 2000);
   });
 
   request.send();
@@ -76,6 +91,11 @@ function removeCoachFromTeam() {
 
   request.addEventListener('load', (e) => {
     e.preventDefault();
+    let message = document.getElementById('msg');
+    message.innerText = 'Coach has been removed';
+    setTimeout(() => {
+      message.innerText = '';
+    }, 2000);
   });
 
   request.send();

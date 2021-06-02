@@ -6,14 +6,14 @@ CREATE TABLE admins (
 
 CREATE TABLE sports (
   id SERIAL PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
   admin_id INTEGER REFERENCES admins (id)
   ON DELETE CASCADE
 );
 
 CREATE TABLE leagues (
   id SERIAL PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
   sport_id INTEGER REFERENCES sports (id)
   ON DELETE CASCADE,
   admin_id INTEGER REFERENCES admins (id)
@@ -22,7 +22,7 @@ CREATE TABLE leagues (
 
 CREATE TABLE teams (
   id SERIAL PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
   league_id INTEGER REFERENCES leagues (id)
   ON DELETE CASCADE,
   admin_id INTEGER REFERENCES admins (id)

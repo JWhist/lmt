@@ -157,3 +157,12 @@ function fillDates() {
     request.send();
   });
 }
+
+function toggleNewPasswordModal() {
+  const modal = document.getElementById('newpasswordmodal');
+  if (modal.style.display == 'none') {
+    modal.style.display = 'inline-block';
+  } else {
+    modal.style.display = 'none';
+  }
+}

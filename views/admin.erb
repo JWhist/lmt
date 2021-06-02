@@ -1,7 +1,7 @@
 <div class='admincontainer'>
   <header><h1>League Management Tool - <%= @username %>
   <% if session[:message] %>
-   <h1 class='message'><%= session.delete(:message) %></h1>
+   <h1 class='message' id='msg'><%= session.delete(:message) %></h1>
   <% end %>
   </h1>
   </header>  
@@ -9,67 +9,78 @@
   <div class='column'>
     <div class='card' >
       <h5 class='cardtitle'>Sports</h5>
-      <select id="sports" name='sport' class='dropdown' >
-        <option value="" disabled selected hidden>Select a sport</option>
-        <% @sports.each do |pair| %>
-          <option value="<%= pair[0] %>"><%= pair[0] %></option>
-        <% end %>
-      </select>
+      <form autocomplete='off'>
+        <select id="sports" name='sport' class='dropdown'>
+          <option value disabled selected hidden>Select a sport</option>
+          <% @sports.each do |pair| %>
+            <option value="<%= pair[0] %>"><%= pair[0] %></option>
+          <% end %>
+        </select>
+      </form>
       <div class='buttonpair'>
         <button class='button' onclick="location.href='/sport/new'">Add</button>
-        <button class='button' id='deletesportbtn' onclick="deleteSport()">Delete</button>
+        <button class='button danger' id='deletesportbtn' onclick="deleteSport()">Delete</button>
       </div>
     </div>
     <div class='card'>
       <h5 class='cardtitle'>Leagues</h5>
+      <form autocomplete='off'>
         <select name='league' class='dropdown' id='leagues'>
-          <option value="" disabled selected hidden>Select a league</option>
+          <option value disabled selected hidden>Select a league</option>
         </select>
+      </form>
       <div class='buttonpair'>
         <button class='button' onclick="location.href='/league/new'">Add</button>
-        <button class='button' id='deleteleaguebtn' onclick="deleteLeague()">Delete</button>
+        <button class='button danger' id='deleteleaguebtn' onclick="deleteLeague()">Delete</button>
       </div>
-      <div class='buttonpair' style='float:right'>
-        <button class='button' id='schedbutton' onclick='getSchedule()'>Printable Schedule</button>
+      <div class='buttonpair' style='float: right'>
+        <button class='button' onclick='getSchedule()'>League Schedule</button>
       </div>
 
     </div>
 
     <div class='card'>
       <h5 class='cardtitle'>Teams</h5>
-      <select name='team' id="teams" class='dropdown'>
-        <option value="" disabled selected hidden>Select a team</option>
-      </select>
+      <form autocomplete='off'>
+        <select name='team' id="teams" class='dropdown'>
+          <option value="" disabled selected hidden>Select a team</option>
+        </select>
+      </form>
       <div class='buttonpair'>
         <button class='button' onclick="location.href='/team/new'">Add</button>
-        <button class='button' id='deleteteambtn' onclick="deleteTeam()">Delete</button>
+        <button class='button danger' id='deleteteambtn' onclick="deleteTeam()">Delete</button>
       </div>
       <div class='buttonpair' style='float: right'>
-        <button class='button' onclick="getRoster()">Show Roster</button>
+        <button class='button' onclick="getRoster()">Team Roster</button>
       </div>
     </div>
 
     <div class='card'>
       <h5 class='cardtitle'>Games</h5>
-      <select id='games' name='game'>
-        <option value="" disabled selected hidden></option>
-      </select>
+      <form autocomplete='off'>
+        <select id='games' name='game'>
+          <option value="" disabled selected hidden>Select a game</option>
+        </select>
+      </form>
       <div class='buttonpair'>
         <button class='button' onclick="location.href='/game/new'">Add</button>
-        <button class='button' id='deletegamebtn' onclick='deleteGame()'>Delete</button>
+        <button class='button danger' id='deletegamebtn' onclick='deleteGame()'>Delete</button>
       </div>
     </div>
   </div>
   
   <div class='column'>
     <div class='card'>
-      <h5 class='cardtitle'>Players</h5>
-      <select id="players" name='player' class='dropdown'>
-        <option value="" disabled selected hidden></option>
-      </select>
+      <h5 class='cardtitle'>Players</h5><button class='button' onclick="window.open('/admin/roster', '_blank')">Admin Roster</button>
+
+      <form autocomplete='off'>
+        <select id="players" name='player' class='dropdown'>
+          <option value="" disabled selected hidden></option>
+        </select>
+      </form>
       <div class='buttonpair'>
         <button class='button' onclick="location.href='/player/new'">Add</button>
-        <button class='button' onclick='deletePlayer()'>Delete</button>
+        <button class='button danger' onclick='deletePlayer()'>Delete</button>
       </div>
       <div class='buttonpair'>
         <button class='button' onclick='assignPlayerToTeam()'>Assign to team</button>
@@ -79,12 +90,14 @@
 
     <div class='card'>
       <h5 class='cardtitle'>Coaches</h5>
-      <select name='coach' id='coaches' class='dropdown'>
-        <option value="" disabled selected hidden></option>
-      </select>
+      <form autocomplete='off'>
+        <select name='coach' id='coaches' class='dropdown'>
+          <option value="" disabled selected hidden></option>
+        </select>
+      </form>
       <div class='buttonpair'>
         <button class='button' onclick="location.href='/coach/new'">Add</button>
-        <button class='button' onclick='deleteCoach()'>Delete</button>
+        <button class='button danger' onclick='deleteCoach()'>Delete</button>
       </div>
       <div class='buttonpair'>
         <button class='button' onclick='assignCoachToTeam()'>Assign to team</button>
@@ -93,8 +106,17 @@
     </div>
 
     <div class='card'>
+      <div class='buttonpair' id='newpasswordmodal'>
+        <form action='/password/new' method='POST' autocomplete='off'>
+          <label for='password'>Enter a new password:</label>
+          <input type='text' name='password'>
+          <button class='button' type='submit' style='float: right'>Submit</button>
+          <button class='button' type='reset' onclick='toggleNewPasswordModal()'>Cancel</button>
+        </form>
+      </div>
+
       <div class='buttonpair' style='float: right'>
-        <button class='button'>Change Password</button>
+        <button class='button danger' onclick="toggleNewPasswordModal()" id='cpbtn'>Change Password</button>
         <button class='button' onclick="location.href='/logout'">Log Out</button>
       </div>
     </div>

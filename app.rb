@@ -435,7 +435,7 @@ post '/player/new' do
 
   @db.create_player!(options)
 
-  @session[:message] = "Player has been created"
+  session[:message] = "Player has been created"
   redirect '/admin'
 end
 

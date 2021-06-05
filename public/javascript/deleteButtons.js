@@ -43,6 +43,11 @@ function deleteGame() {
   request.open('POST', `/game/delete?team=${team}&date=${date}`);
   request.addEventListener('load', (e) => {
     e.preventDefault();
+    let message = document.getElementById('msg');
+    message.innerText = 'Game has been deleted';
+    setTimeout(() => {
+      message.innerText = '';
+    }, 2000);
     fillGames();
   })
   request.send();
@@ -56,6 +61,11 @@ function deletePlayer() {
   request.open('POST', `/player/delete?player_id=${player_id}`);
   request.addEventListener('load', (e) => {
     e.preventDefault();
+    let message = document.getElementById('msg');
+    message.innerText = 'Player has been deleted';
+    setTimeout(() => {
+      message.innerText = '';
+    }, 2000);
     fillPlayers();
   })
   request.send();
@@ -68,6 +78,11 @@ function deleteCoach() {
   request.open('POST', `/coach/delete?coach_id=${coach_id}`);
   request.addEventListener('load', (e) => {
     e.preventDefault();
+    let message = document.getElementById('msg');
+    message.innerText = 'Coach has been deleted';
+    setTimeout(() => {
+      message.innerText = '';
+    }, 2000);
     fillCoaches();
   })
   request.send();

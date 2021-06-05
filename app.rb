@@ -338,7 +338,7 @@ post '/coach/new' do
               email: coach_email, phone: coach_phone }
 
   @db.create_coach!(options)
-  @session[:message] = "Coach has been created"
+  session[:message] = "Coach has been created"
   redirect '/admin'
 end
 
@@ -471,7 +471,7 @@ post '/game/new' do
   options = { admin_id: admin_id, date: date, venue: venue, hid: hid, aid: aid }
   @db.create_game!(options)
 
-  @session[:message] = "Game has been created"
+  session[:message] = "Game has been created"
   redirect '/admin'
 end
 

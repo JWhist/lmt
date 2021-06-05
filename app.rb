@@ -126,7 +126,7 @@ post '/admin/new' do
     password = BCrypt::Password.create(password)
     @db.create_admin!(username, password)
     session[:admin_id] = @db.admin_id(username)
-    session[:message] = "New user \"#{username}\" created."
+    session[:message] = "New user \"#{username}\" has been created."
     
     redirect "/admin"
   else
@@ -165,7 +165,7 @@ post '/sport/new' do
   name = params[:name]
   @db.create_sport!(admin_id, name)
 
-  session[:message] = 'New sport created'
+  session[:message] = 'New sport has been created'
   redirect '/admin'
 end
 
@@ -211,7 +211,7 @@ post '/league/new' do
   league_name = params[:league_name]
   @db.create_league!(admin_id, sport_id, league_name)
 
-  session[:message] = 'New league created'
+  session[:message] = 'New league has been created'
   redirect '/admin'
 end
 
@@ -270,7 +270,7 @@ post '/team/new' do
 
   @db.create_team!(admin_id, league_id, team_name)
 
-  session[:message] = 'New team created'
+  session[:message] = 'New team has been created'
   redirect '/admin'
 end
 
@@ -338,7 +338,7 @@ post '/coach/new' do
               email: coach_email, phone: coach_phone }
 
   @db.create_coach!(options)
-
+  @session[:message] = "Coach has been created"
   redirect '/admin'
 end
 
@@ -435,6 +435,7 @@ post '/player/new' do
 
   @db.create_player!(options)
 
+  @session[:message] = "Player has been created"
   redirect '/admin'
 end
 
@@ -470,7 +471,7 @@ post '/game/new' do
   options = { admin_id: admin_id, date: date, venue: venue, hid: hid, aid: aid }
   @db.create_game!(options)
 
-  session[:message] = 'New game created'
+  @session[:message] = "Game has been created"
   redirect '/admin'
 end
 

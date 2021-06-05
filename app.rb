@@ -290,9 +290,10 @@ get '/admin/roster' do
   require_signed_in_admin
 
   admin_id = session[:admin_id]
-  @players = @db.conn.exec('SELECT name, email, phone FROM players;').values
-  @coaches = @db.conn.exec('SELECT name, email, phone FROM coaches;').values
-
+  sql = "SELECT name, email, phone FROM players WHERE admin_id = $1;"
+  @players = @db.conn.exec_params(sql, [admin_id]).values
+  sql = "SELECT name, email, phone FROM coaches WHERE admin_id = $1;"
+  @coaches = @db.conn.exec_params(sql, [admin_id])).values
 
   erb :roster
 end

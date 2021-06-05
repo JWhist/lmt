@@ -293,7 +293,7 @@ get '/admin/roster' do
   sql = "SELECT name, email, phone FROM players WHERE admin_id = $1;"
   @players = @db.conn.exec_params(sql, [admin_id]).values
   sql = "SELECT name, email, phone FROM coaches WHERE admin_id = $1;"
-  @coaches = @db.conn.exec_params(sql, [admin_id])).values
+  @coaches = @db.conn.exec_params(sql, [admin_id]).values
 
   erb :roster
 end

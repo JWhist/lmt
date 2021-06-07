@@ -98,11 +98,11 @@ function fillGames() {
   request.addEventListener("load", (e) => {
     e.preventDefault();
     let options = JSON.parse(request.responseText);
-    let l = options[1].length
+    let l = options.length
     if (res.innerHTML) res.innerHTML = '';
     res.size = l + 1;
 
-    options[1].forEach((game, i) => {
+    options.forEach((game, i) => {
       let op = document.createElement('option');
       op.value = game[0];
       op.innerText = `Date: ${game[0]}\nLocation: ${game[1]}\nHome: ${game[2]}\n Away: ${game[3]}\n`;

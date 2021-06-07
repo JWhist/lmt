@@ -100,3 +100,19 @@ function removeCoachFromTeam() {
 
   request.send();
 }
+
+function getLeagueRoster() {
+  const leagueMenu = document.getElementById('leagues');
+  let league = leagueMenu.value;
+
+  if (!league) return;
+  window.open(`/league/roster?league=${league}`, '_blank');
+}
+
+function getTeamSchedule() {
+  const teamMenu = document.getElementById('teams');
+  let team = teamMenu.value;
+  
+  if (!team) return;
+  window.open(`/team/schedule?team=${team}`, '_blank');
+}

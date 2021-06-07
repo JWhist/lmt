@@ -244,7 +244,21 @@ get '/league/schedule' do
   league = params[:league]
   league_id = @db.league_id(admin_id, league)
 
+  @entity = league
   @schedule = @db.league_schedule(admin_id, league_id)
+
+  erb :schedule
+end
+
+get '/team/schedule' do
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  team = params[:team]
+  team_id = @db.team_id(admin_id, team)
+
+  @entity = team
+  @schedule = @db.team_schedule(admin_id, team_id)
 
   erb :schedule
 end
@@ -307,6 +321,29 @@ get '/team/roster' do
 
   @players = @db.player_roster(admin_id, team_id)
   @coaches = @db.coach_roster(admin_id, team_id)
+
+  erb :roster
+end
+
+get '/league/roster' do
+  require_signed_in_admin
+
+  admin_id = session[:admin_id]
+  league = params[:league]
+  league_id = @db.league_id(admin_id, league)
+  teams = @db.teams(admin_id, league_id)
+  @players = []
+  @coaches = []
+  
+  teams.each do |team| 
+    team_id = @db.team_id(admin_id, team[1])
+    player_roster = @db.player_roster(admin_id, team_id)
+    coach_roster = @db.coach_roster(admin_id, team_id)
+    @players.push(player_roster.flatten(1))
+    @coaches.push(coach_roster.flatten)
+  end
+
+  @team_name = league
 
   erb :roster
 end

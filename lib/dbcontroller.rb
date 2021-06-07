@@ -383,7 +383,7 @@ class DBController
 
     result = @conn.exec_params(sql, [admin_id, team_id])
     
-    [result.fields, result.values]
+    result.values
   end
   # --------------------------------------------------------------------
   # GET LEAGUE SCHEDULE
@@ -392,7 +392,7 @@ class DBController
     games = []
     teams = teams(admin_id, league_id) # array of team IDs and names
     teams.each do |team|
-      team_schedule(admin_id, team[0])[1].each do |game|
+      team_schedule(admin_id, team[0]).each do |game|
         games << game
       end
     end

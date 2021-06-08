@@ -1,21 +1,25 @@
 <div class='maincontainer'>
-<h3>Create a new admin:</h3>
-  <% if session[:message] %>
-    <h5 class='message'><%= session.delete(:message) %></h5>
-  <% end %>
+  <div class='column'>
+    <h3>Create a new admin:</h3>
+      <% if session[:message] %>
+        <h5 class='message'><%= session.delete(:message) %></h5>
+      <% end %>
+  </div>
 
-<form action='/admin/new' method='post'>
-  <ul>
-    <li>
-      <label for='username'>Username:</label>
-      <input type='text' name='username' placeholder='Username' required>
-    </li>
-    <li>
-      <label for='password'>Password:</label>
-      <input type='password' name='password' placeholder='Password' required>
-    </li>
-      <button class='button' type='submit'>Submit</button>
-      <button class='button' type='reset' onclick="location.href='/'">Back</button>
-  </ul>
-</form>
+  <div class='column'>
+    <form action='/admin/new' method='post'>
+      <ul>
+        <li>
+          <label for='username'>Username:</label>
+          <input type='text' name='username' placeholder='Username' required>
+        </li>
+        <li>
+          <label for='password'>Password:</label>
+          <input type='password' name='password' placeholder='Password' required>
+        </li>
+          <button class='button' type='submit'>Submit</button>
+          <button class='button' type='reset' onclick="location.href='/'">Back</button>
+      </ul>
+    </form>
+  </div>
 </div>

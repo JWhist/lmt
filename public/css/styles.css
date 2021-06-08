@@ -6,8 +6,16 @@
   font-size: 10pt;
   color: black;
 }
+a {
+  color: white;
+}
+
 a:link {
   text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+  color:rgb(116, 116, 241);
 }
 header {
   position: absolute;
@@ -24,7 +32,7 @@ h1 {
 }
 .title, .title em {
   color: white;
-  
+  font-size: 1.5rem;
 }
 
 h3 {
@@ -87,7 +95,7 @@ label {
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-evenly;
-  padding-top: 80px;
+  padding-top: 90px;
 }
 
 .logincolumn, .column {
@@ -99,14 +107,15 @@ label {
   margin: 5px;
   width: 30%;
   min-width: 500px;
+
 }
 
 .column {
   border-radius: 25px;
   background: rgba(0, 0, 0, .3);
-  box-shadow: 5px 5px 5px  rgba(55, 53, 53, 0.6);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 5px 5px 5px  rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .card {
@@ -131,13 +140,16 @@ label {
 
 #login {
   border-radius: 25px;
-  background-color: rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, .3);
+  box-shadow: 5px 5px 5px  rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   width: 65%;
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 5px 5px 5px  rgba(0, 0, 0, 0.6);
+
 }
 
 #newadminlink:hover {

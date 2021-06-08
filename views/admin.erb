@@ -1,7 +1,7 @@
 <div class='admincontainer'>
   <header>
     <div class='column'>
-    <h1> - League Management Tool - <%= @username %>
+    <h1 class='title'>League Management Tool - <em><%= @username %></em>
       <h1 class='message' id='msg'>
         <% if session[:message] %>
           <%= session.delete(:message) %>

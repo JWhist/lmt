@@ -70,6 +70,7 @@ function deletePlayer() {
   })
   request.send();
 }
+
 function deleteCoach() {
   const coachesMenu = document.getElementById("coaches");
   let coach_id = coachesMenu.value;
@@ -87,6 +88,7 @@ function deleteCoach() {
   })
   request.send();
 }
+
 function fillGames() {
   const teamsMenu = document.getElementById("teams");
   let team = teamsMenu.value;
@@ -111,7 +113,6 @@ function fillGames() {
   });
   request.send();
 }
-
 
 function fillPlayers() {
   const res = document.querySelector('#players');
